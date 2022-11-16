@@ -1,0 +1,48 @@
+@import "src/styles/responsive";
+
+.button {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 500 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  border-radius: 6px !important;
+
+  @include adaptive-value('font-size', 16, 10, 0);
+  color: var(--color-secondary-100) !important;
+
+  &Outline {
+    border: 1px solid var(--color-primary-100) !important;
+
+    &:disabled {
+      background-color: transparent !important;
+      color: var(--color-primary-40) !important;
+      border: 1px solid var(--color-primary-40) !important;
+    }
+  }
+
+  &Primary {
+    border: 1px solid transparent !important;
+    background-color: var(--color-primary-100) !important;
+
+    &:disabled {
+      background-color: var(--color-primary-20) !important;
+      color: var(--color-primary-40) !important;
+      border: 1px solid transparent !important;
+    }
+
+    &:hover {
+      border-color: transparent !important;
+    }
+  }
+
+  &Default {
+    background-color: transparent !important;
+    border-color: transparent !important;
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["react-app", "prettier", "react-app/jest", "plugin:css-modules/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier",
+    "css-modules",
+    "no-relative-import-paths",
+    "eslint-plugin-import-helpers"
+  ],
+  "rules": {
+    "curly": ["off"],
+    "no-shadow": "off",
+    "no-loop-func": "off",
+    "no-param-reassign": ["error", { "props": false }],
+    "react-hooks/exhaustive-deps": "off",
+    "no-underscore-dangle": "off",
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "no-multiple-empty-lines": ["error", { "max": 2 }],
+    "css-modules/no-unused-class": [2, { "camelCase": true }],
+    "css-modules/no-undef-class": [2, { "camelCase": true }],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "import-helpers/order-imports": [
+      "error",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          "/^react.*/",
+          "module",
+          "/assets/",
+          "/common/",
+          "/pages/",
+          "/layout/",
+          "/features/",
+          ["parent", "sibling", "index", "absolute"]
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ],
+    "no-relative-import-paths/no-relative-import-paths": ["error", { "allowSameFolder": true }]
+  },
+  "overrides": [
+    {
+      "files": ["*constants.ts"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "default",
+            "format": ["UPPER_CASE"]
+          }
+        ]
+      }
+    }
+  ]
+}
