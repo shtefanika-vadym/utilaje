@@ -10,6 +10,6 @@ export const Router = () => (
   <Routes>
     <Route path={PATHS.HOME} element={<Home />} />
     <Route path={PATHS.LOGIN} element={<Login />} />
-    <Route path='*' element={<Navigate to={PATHS.HOME} replace />} />
+    <Route path='*' element={<Navigate to={PATHS.LOGIN} replace />} />
   </Routes>
 )

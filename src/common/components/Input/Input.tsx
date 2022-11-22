@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { Input as AntInput, InputProps } from 'antd'
 
 import styles from './input.module.scss'
+import 'antd/lib/input/style/css'
 
 interface IProps extends InputProps {
   name: string

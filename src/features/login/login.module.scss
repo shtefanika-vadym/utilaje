@@ -1,2 +1,64 @@
+@import 'src/styles/responsive';
+
 .parent {
+  &Title {
+    font-style: normal;
+    font-weight: 600;
+    @include adaptive-value('font-size', 24, 18, 0);
+    line-height: 133%;
+    color: var(--color-dark-06);
+    margin: 0 0 40px 0;
+  }
+
+  &Content {
+    display: flex;
+    align-items: center;
+    column-gap: 50px;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1920px;
+    height: calc(100vh);
+    @include adaptive-value('padding', 200, 50, 0);
+  }
+
+  &First {
+    flex: 5;
+    @include device(smallOnly) {
+      display: none;
+    }
+  }
+
+  &Second {
+    flex: 5;
+  }
+
+  &FormItem {
+  }
+
+  &Form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    max-width: 500px;
+    @include device(smallOnly) {
+      max-width: 100%;
+    }
+  }
+
+  &BackgroundImg {
+    width: 500px;
+    max-width: 500px;
+    @include adaptive-value('width', 500, 200, 0);
+  }
+
+  &Submit {
+    width: 100%;
+    padding: 20px 0 0 0;
+  }
+
+  &ErrorMessage {
+    color: var(--color-warning);
+    font-size: 12px;
+    margin-bottom: 0;
+  }
 }

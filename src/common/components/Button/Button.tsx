@@ -16,7 +16,11 @@ interface IProps extends NativeButtonProps {
   modifier?: 'outline' | 'primary' | 'default'
 }
 
-export const Button: FC<IProps> = ({ children, modifier = 'default', ...rest }) => {
+export const Button: FC<IProps> = ({
+  children,
+  modifier = 'default',
+  ...rest
+}) => {
   return (
     // I suppress next line with @ts-ignore because there is an error TS2322
     // @ts-ignore
