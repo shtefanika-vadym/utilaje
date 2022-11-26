@@ -1,0 +1,72 @@
+@import 'src/styles/responsive';
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: var(--color-light-02);
+  padding: 5px 32px 5px 32px;
+  @include adaptive-value('min-height', 64, 80, 0);
+  z-index: 1;
+  position: sticky;
+  top: 0;
+
+  &Admin {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    @include adaptive-value('font-size', 16, 10, 0);
+    line-height: 140%;
+    color: var(--color-dark-05);
+  }
+
+  &Content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 24px;
+  }
+
+  &Cart {
+    font-style: normal;
+    font-weight: 700;
+    @include adaptive-value('font-size', 16, 10, 0);
+    line-height: 120%;
+    color: var(--color-white);
+  }
+
+  &Price {
+    @include adaptive-value('padding-right', 12, 6, 0);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+  }
+
+  &Sticky {
+    box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  &CartIcon {
+    @include adaptive-value('width', 16, 10, 0);
+  }
+
+  &Total {
+    display: flex;
+    align-items: center;
+    @include adaptive-value('column-gap', 5, 2, 0);
+    @include adaptive-value('padding-left', 12, 6, 0);
+    @include adaptive-value('padding-left', 12, 6, 0);
+  }
+
+  &Btn {
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    @include adaptive-value('padding-top', 15, 5, 0);
+    @include adaptive-value('padding-bottom', 15, 5, 0);
+    @include adaptive-value('padding-left', 23, 15, 0);
+    @include adaptive-value('padding-right', 23, 15, 0);
+    @include adaptive-value('border-radius', 30, 10, 0);
+    background-color: var(--color-primary-100);
+  }
+}

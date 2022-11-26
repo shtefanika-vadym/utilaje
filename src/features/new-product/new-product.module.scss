@@ -1,0 +1,75 @@
+@import 'src/styles/responsive';
+
+.parent {
+  max-width: 1920px;
+  padding: 40px;
+  margin: 0 auto;
+
+  &Title {
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;
+    @include adaptive-value('font-size', 32, 20, 0);
+    color: var(--color-dark-05);
+    margin-bottom: 0;
+  }
+
+  &Head {
+    display: flex;
+    align-items: center;
+    column-gap: 30px;
+  }
+
+  &Form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &Label {
+    font-style: normal;
+    font-weight: 500;
+    line-height: 154%;
+    color: var(--color-dark-06);
+    margin-bottom: 0;
+    padding: 0 0 4px 0;
+    @include adaptive-value('font-size', 13, 10, 0);
+  }
+
+  &AreaField {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &TextArea {
+    resize: none;
+    border: 1px solid #d1d1d6;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 80px !important;
+    padding: 12px 12px 12px 12px;
+    overflow-y: scroll;
+    outline: none;
+
+    &::placeholder {
+      font-style: normal;
+      font-weight: 500;
+      line-height: 110%;
+      @include adaptive-value('font-size', 14, 10, 0);
+      color: var(--color-light-06);
+    }
+  }
+
+  &ErrorMessage {
+    color: var(--color-warning);
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  &Submit {
+    margin: 20px 0 0 0;
+    width: 100%;
+  }
+}

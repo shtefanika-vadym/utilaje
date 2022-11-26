@@ -1,10 +1,13 @@
+@import 'src/styles/responsive';
+
 .label {
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 20px;
+  line-height: 154%;
   color: var(--color-dark-06);
+  margin-bottom: 0;
   padding: 0 0 4px 0;
+  @include adaptive-value('font-size', 13, 10, 0);
 }
 
 .container {
@@ -21,8 +24,8 @@
     &::placeholder {
       font-style: normal;
       font-weight: 500;
-      font-size: 14px;
-      line-height: 18px;
+      line-height: 110%;
+      @include adaptive-value('font-size', 14, 10, 0);
       color: var(--color-light-06);
     }
   }

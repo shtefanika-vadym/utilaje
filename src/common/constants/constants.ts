@@ -1,5 +1,8 @@
 export enum ALT_IMG {
   APP_LOGO = 'Logo aplicatiei',
+  STATUS_ICON = 'Status',
+  BACK_ICON = 'Iconita de revenire',
+  SEARCH_ICON = 'Iconita de filtrare',
   LOGIN_BG = 'Autentificare imaginea reprezentativa',
 }
 

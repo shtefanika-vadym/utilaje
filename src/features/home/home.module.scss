@@ -1,2 +1,22 @@
 .parent {
+  max-width: 1920px;
+  padding: 40px;
+  margin: 0 auto;
+
+  &FilterBlock {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    column-gap: 30px;
+    justify-content: space-between;
+  }
+
+  &Search, &Sort {
+    width: 50%;
+  }
+
+  &Sort {
+    display: flex;
+    flex-direction: column;
+  }
 }
