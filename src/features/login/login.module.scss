@@ -30,6 +30,12 @@
 
   &Second {
     flex: 5;
+    position: relative;
+  }
+
+  &Logo {
+    position: absolute;
+    top: -100px;
   }
 
   &FormItem {
@@ -56,9 +62,14 @@
     padding: 20px 0 0 0;
   }
 
-  &ErrorMessage {
+  &ErrorMessage,
+  &LoginErrorMessage {
     color: var(--color-warning);
     font-size: 12px;
     margin-bottom: 0;
+  }
+
+  &LoginErrorMessage {
+    text-transform: capitalize;
   }
 }
