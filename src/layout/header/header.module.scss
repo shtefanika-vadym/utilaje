@@ -6,18 +6,13 @@
   justify-content: flex-end;
   background-color: var(--color-light-02);
   padding: 5px 32px 5px 32px;
-  @include adaptive-value('min-height', 64, 80, 0);
+  @include adaptive-value('min-height', 64, 40, 0);
   z-index: 1;
   position: sticky;
   top: 0;
 
-  &Admin {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    @include adaptive-value('font-size', 16, 10, 0);
-    line-height: 140%;
-    color: var(--color-dark-05);
+  &Logo {
+    @include adaptive-value('width', 80, 40, 0);
   }
 
   &Content {

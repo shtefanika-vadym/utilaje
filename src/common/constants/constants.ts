@@ -4,6 +4,7 @@ export enum ALT_IMG {
   BACK_ICON = 'Iconita de revenire',
   SEARCH_ICON = 'Iconita de filtrare',
   LOGIN_BG = 'Autentificare imaginea reprezentativa',
+  REMOVE_ICON = 'Iconita de stergere',
 }
 
 export const UTILAJES_ADMIN_ACCESS_TOKEN = 'UTILAJES_ADMIN_ACCESS_TOKEN'

@@ -1,0 +1,16 @@
+@import 'src/styles/responsive';
+
+.parent {
+  &RemoveMessage {
+    @include adaptive-value('font-size', 18, 10, 0);
+    text-align: center;
+  }
+
+  &Confirm {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px 0 0 0;
+  }
+}

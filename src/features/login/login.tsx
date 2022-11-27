@@ -6,7 +6,7 @@ import { auth } from 'firebaseInit'
 import { FormikValues, useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import logo from 'common/assets/logo.svg'
+import logo from 'common/assets/logo-line.svg'
 import loginBg from 'features/login/assets/login-bg.svg'
 
 import { Button } from 'common/components/Button/Button'

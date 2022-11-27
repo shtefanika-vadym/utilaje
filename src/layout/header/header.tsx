@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import classNames from 'classnames'
 
 import cartIcon from 'common/assets/cart.svg'
+import logo from 'common/assets/logo.svg'
 
+import { ALT_IMG } from 'common/constants/constants'
 import { AuthService } from 'common/services/auth-service'
 
 import { PATHS } from 'layout/paths'
@@ -12,6 +14,7 @@ import { PATHS } from 'layout/paths'
 import styles from './header.module.scss'
 
 const Header: FC = () => {
+  const location = useLocation()
   const navigate = useNavigate()
   const headerRef = useRef<HTMLElement>(null)
 
@@ -34,15 +37,14 @@ const Header: FC = () => {
   }, [])
 
   const handleNavigateToAddProducts = (): void => {
-    navigate(PATHS.ADD_PRODUCT)
+    if (!location.pathname.includes(PATHS.ADD_PRODUCT))
+      navigate(PATHS.ADD_PRODUCT)
   }
 
   return (
     <header ref={headerRef} className={styles.header}>
       <div className={styles.headerContent}>
-        {AuthService.getToken() && (
-          <span className={styles.headerAdmin}>Salutare Eduard</span>
-        )}
+        <img src={logo} alt={ALT_IMG.APP_LOGO} className={styles.headerLogo} />
         {!AuthService.getToken() ? (
           <button className={styles.headerBtn}>
             <span className={classNames(styles.headerCart, styles.headerPrice)}>

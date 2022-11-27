@@ -41,8 +41,8 @@ export const Select: FC<ISelect> = ({
           return (
             <Option
               key={nanoid()}
-              value={option?.code || option?.id || option?.value}>
-              {option.name}
+              value={option?.category || option?.id || option?.value || option}>
+              {option.name || option}
             </Option>
           )
         })}
