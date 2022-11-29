@@ -127,7 +127,11 @@ export const Home = () => {
           return (
             <div className={styles.parentProduct} key={nanoid()}>
               <div>
-                <img src={product.image} alt='' />
+                <img
+                  src={product.image}
+                  alt=''
+                  className={styles.parentProductImage}
+                />
                 <div className={styles.parentProductTitle}>{product.title}</div>
                 <p className={styles.parentProductDescription}>
                   {product.description}

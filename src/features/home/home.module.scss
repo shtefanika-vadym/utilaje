@@ -39,6 +39,10 @@
     border: 1px solid var(--color-light-03);
   }
 
+  &ProductImage {
+    width: 100%;
+  }
+
   &ProductsList{
     padding: 40px 0 0 0;
     display: flex;
