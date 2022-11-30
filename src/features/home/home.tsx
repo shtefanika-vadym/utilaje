@@ -1,34 +1,62 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useToggle } from 'react-use'
 
 import classNames from 'classnames'
-import { nanoid } from 'nanoid'
-
-import removeIcon from 'common/assets/REMOVE.svg'
-import searchIcon from 'common/assets/search.svg'
+import { db } from 'firebaseInit'
+import { PATHS } from 'layout/paths'
+import { UPDATE_CART, UPDATE_CATEGORIES } from 'store/products-slice'
 
 import { Button } from 'common/components/Button/Button'
-import { Input } from 'common/components/Input/Input'
-import { Select } from 'common/components/select/select'
-import { ALT_IMG } from 'common/constants/constants'
-import { useAppSelector } from 'common/hooks/redux'
+import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { ICategory, IProduct } from 'common/interfaces/IProduct'
 import { AuthService } from 'common/services/auth-service'
 
 import { AddCategoryModal } from 'features/home/components/add-category-modal/add-category-modal'
+import { CategoryList } from 'features/home/components/category-list/category-list'
+import { ProductList } from 'features/home/components/product-list/product-list'
 import { RemoveCategoryModal } from 'features/home/components/remove-category-modal/remove-category-modal'
+import { HOME_LABELS } from 'features/home/constants/constants'
 
 import styles from './home.module.scss'
 
 export const Home = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useAppDispatch()
   const [removedCategory, setRemovedCategory] = useState<ICategory | null>(null)
   const [isOpenRemoveModal, toggleIsOpenRemoveModal] = useToggle(false)
   const [isOpenAddCategory, toggleIsOpenAddCategory] = useToggle(false)
+  const [isFetchingCategories, toggleIsFetchingCategories] = useToggle(false)
 
   const [activeCategory, setActiveCategory] = useState<string>('toate')
-  const { categories, products } = useAppSelector(
+  const { categories, products, searchValue } = useAppSelector(
     (state) => state.productsReducer,
   )
+
+  // const firebaseCategories = useFirebaseTable('categories')
+  // const firebaseProducts = useFirebaseTable('products')
+
+  useEffect(() => {
+    const fetchCategoryData = async () => {
+      toggleIsFetchingCategories()
+      try {
+        const collectionRef = db.collection('categories')
+        await collectionRef.onSnapshot((docSnapshot) => {
+          const data = docSnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          })) as ICategory[]
+          dispatch(UPDATE_CATEGORIES(data))
+        })
+      } catch (e) {
+        console.error(e.message)
+      } finally {
+        toggleIsFetchingCategories()
+      }
+    }
+    fetchCategoryData()
+  }, [])
 
   const handleChangeCategory = (category: string): void => {
     setActiveCategory(category)
@@ -45,11 +73,31 @@ export const Home = () => {
   }
 
   const adjustedProducts = useMemo((): IProduct[] => {
-    if (activeCategory === 'toate') return products
-    return products.filter(
+    const filteredProducts = products.filter((product: IProduct): boolean =>
+      product.title?.toLowerCase().includes(searchValue?.toLowerCase()),
+    )
+    if (activeCategory === 'toate') return filteredProducts
+    return filteredProducts.filter(
       (product: IProduct): boolean => product.category === activeCategory,
     )
-  }, [products, activeCategory])
+  }, [products, activeCategory, searchValue])
+
+  const isEmptyCategory = useMemo(
+    () =>
+      !products.filter(
+        (product: IProduct): boolean => product.category === activeCategory,
+      ).length && activeCategory !== 'toate',
+    [products, activeCategory],
+  )
+
+  const handleNavigateToAddProducts = (): void => {
+    if (!location.pathname.includes(PATHS.ADD_PRODUCT))
+      navigate(PATHS.ADD_PRODUCT)
+  }
+
+  const handleUpdateCart = (product: IProduct): void => {
+    dispatch(UPDATE_CART(product))
+  }
 
   return (
     <div className={styles.parent}>
@@ -62,92 +110,48 @@ export const Home = () => {
         isOpen={isOpenAddCategory}
         onClose={toggleIsOpenAddCategory}
       />
-      <div className={styles.parentFilterBlock}>
-        <div className={styles.parentSearch}>
-          <Input
-            name='filter'
-            label='Filtrare'
-            suffix={<img src={searchIcon} alt={ALT_IMG.SEARCH_ICON} />}
-            placeholder='Filtreaza dupa numele produsului...'
-          />
-        </div>
-        <div className={styles.parentSort}>
-          <Select
-            label={'Sortare'}
-            name={'sort'}
-            listOptions={[]}
-            placeholder={'Sorteaza dupa'}
-          />
-        </div>
-      </div>
       <div className={styles.parentCategoriesContent}>
         <div className={styles.parentCategories}>
           <button
             onClick={() => handleChangeCategory('toate')}
             className={classNames(
-              styles.parentCategory,
-              'toate' === activeCategory && styles.parentCategoryActive,
+              'category',
+              'toate' === activeCategory && 'activeCategory',
             )}>
-            toate
+            {HOME_LABELS.ALL}
           </button>
-          {categories?.map(
-            (categoryItem: ICategory): JSX.Element => (
-              <button
-                key={categoryItem.id}
-                onClick={() => handleChangeCategory(categoryItem.category)}
-                className={classNames(
-                  styles.parentCategory,
-                  categoryItem.category === activeCategory &&
-                    styles.parentCategoryActive,
-                )}>
-                {categoryItem.category}
-                {AuthService.getToken() && (
-                  <img
-                    src={removeIcon}
-                    alt={ALT_IMG.REMOVE_ICON}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      handleDeleteCategory(categoryItem)
-                    }}
-                  />
-                )}
-              </button>
-            ),
-          )}
+          <CategoryList
+            categories={categories}
+            activeCategoryName={activeCategory}
+            handleDeleteCategory={handleDeleteCategory}
+            handleChangeCategory={handleChangeCategory}
+          />
         </div>
         {AuthService.getToken() && (
-          <Button modifier={'primary'} onClick={toggleIsOpenAddCategory}>
-            Adauga o categorie
-          </Button>
+          <div className={styles.parentManager}>
+            <Button modifier={'outline'} onClick={toggleIsOpenAddCategory}>
+              {HOME_LABELS.ADD_CATEGORY}
+            </Button>
+            <Button modifier={'primary'} onClick={handleNavigateToAddProducts}>
+              {HOME_LABELS.ADD_PRODUCT}
+            </Button>
+          </div>
         )}
       </div>
-      <div className={styles.parentProductsList}>
-        {adjustedProducts?.map((product: IProduct): JSX.Element => {
-          console.log(product)
-          return (
-            <div className={styles.parentProduct} key={nanoid()}>
-              <div>
-                <img
-                  src={product.image}
-                  alt=''
-                  className={styles.parentProductImage}
-                />
-                <div className={styles.parentProductTitle}>{product.title}</div>
-                <p className={styles.parentProductDescription}>
-                  {product.description}
-                </p>
-                <span className={styles.parentProductPrice}>
-                  {product.price}Lei
-                </span>
-              </div>
-
-              <div className={styles.parentProductButton}>
-                <Button modifier={'outline'}>Adauga in cos</Button>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+      {!!products.length &&
+      !isEmptyCategory &&
+      !adjustedProducts.length &&
+      !!searchValue.length ? (
+        <p className='message' style={{ margin: '40px 0 0 0' }}>
+          {HOME_LABELS.NO_PRODUCT_BY}"{searchValue}"
+        </p>
+      ) : (
+        <ProductList
+          products={adjustedProducts}
+          onAddToCart={handleUpdateCart}
+          isFetching={isFetchingCategories}
+        />
+      )}
     </div>
   )
 }

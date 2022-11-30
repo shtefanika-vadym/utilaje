@@ -2,9 +2,9 @@
 
 .parent {
   width: inherit;
-  height: 40px;
   border-radius: 6px;
   overflow: hidden;
+  @include adaptive-value('height', 40, 30, 0, true);
   border: 1px solid var(--color-light-04);
   background-color: var(--color-light-01);
 }

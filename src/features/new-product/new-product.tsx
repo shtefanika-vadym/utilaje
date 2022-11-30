@@ -2,10 +2,12 @@ import React, { useMemo, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { PlusOutlined } from '@ant-design/icons'
-import { Modal, Upload, UploadFile } from 'antd'
+import { InputNumber, Modal, Upload, UploadFile } from 'antd'
 import { RcFile, UploadProps } from 'antd/es/upload/index'
 import { db, storage } from 'firebaseInit'
 import { FormikValues, useFormik } from 'formik'
+import { PATHS } from 'layout/paths'
+import { nanoid } from 'nanoid'
 import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 import * as Yup from 'yup'
 
@@ -16,8 +18,6 @@ import { Select } from 'common/components/select/select'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { ICategory } from 'common/interfaces/IProduct'
 import { AuthService } from 'common/services/auth-service'
-
-import { PATHS } from 'layout/paths'
 
 import styles from './new-product.module.scss'
 
@@ -39,19 +39,26 @@ export const NewProduct = () => {
       title: '',
       category: '',
       description: '',
-      image: '',
+      images: '',
     },
     validationSchema: Yup.object({
-      price: Yup.string().required('Pretul este obligatoriu.'),
+      price: Yup.number().required('Pretul este obligatoriu.'),
       title: Yup.string().required('Titlu este obligatoriu.'),
       description: Yup.string().required('Descrierea este obligatorie.'),
-      image: Yup.string().required('Imaginea este obligatorie.'),
+      images: Yup.array()
+        .required('Imaginea este obligatorie.')
+        .test({
+          message: 'Minim 2 imagini',
+          test: (arr) => {
+            console.log(arr)
+            return arr?.length >= 2
+          },
+        }),
       category: Yup.string().required('Categoria este obligatorie.'),
     }),
     onSubmit: async (values: FormikValues) => {
       try {
-        console.log(values)
-        await db.collection('products').add(values)
+        await db.collection('products').add({ ...values, id: nanoid() })
         navigate(-1)
         dispatch(
           UPDATE_ALERT_INFO({
@@ -77,7 +84,7 @@ export const NewProduct = () => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<any[]>([])
 
   const handleCancel = () => setPreviewOpen(false)
 
@@ -101,16 +108,20 @@ export const NewProduct = () => {
   )
 
   const handleChange: UploadProps['onChange'] = async ({
-    file,
     fileList: newFileList,
   }) => {
-    setFileList(newFileList)
-    const storageRef = storage.ref('products')
-    // @ts-ignore
-    const fileRef = storageRef.child(file.name)
-    await fileRef.put(file.originFileObj)
-    const url = await fileRef.getDownloadURL()
-    formik.setFieldValue('image', url)
+    const files: string[] = []
+    for (let i = 0; i < newFileList.length; i++) {
+      const file = newFileList[i]
+      const storageRef = storage.ref('products')
+      // @ts-ignore
+      const fileRef = storageRef.child(file.name)
+      await fileRef.put(file.originFileObj)
+      const url = await fileRef.getDownloadURL()
+      files.push(url)
+    }
+    setUploadedFiles(newFileList.map((file) => ({ ...file, status: 'done' })))
+    formik.setFieldValue('images', files)
   }
 
   const adjustedCategories = useMemo(
@@ -141,15 +152,23 @@ export const NewProduct = () => {
             <p className={styles.parentErrorMessage}>{formik.errors.title}</p>
           ) : null}
         </div>
-        <div>
-          <Input
-            type='text'
+        <div className={styles.parentField}>
+          <label className={styles.parentLabel} htmlFor='description'>
+            Pret
+          </label>
+          <InputNumber
+            min={0}
             id='price'
-            name='price'
-            label='Pret'
-            placeholder='Pretul produsului'
+            addonAfter='Lei'
+            // @ts-ignore
             value={formik.values.price}
-            onChange={formik.handleChange}
+            placeholder='Pretul produsului'
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            // @ts-ignore
+            parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+            onChange={(price: number) => formik.setFieldValue('price', price)}
           />
           {formik.touched.price && formik.errors.price ? (
             <p className={styles.parentErrorMessage}>{formik.errors.price}</p>
@@ -173,7 +192,7 @@ export const NewProduct = () => {
             </p>
           ) : null}
         </div>
-        <div className={styles.parentAreaField}>
+        <div className={styles.parentField}>
           <label className={styles.parentLabel} htmlFor='description'>
             Descriere
           </label>
@@ -199,16 +218,13 @@ export const NewProduct = () => {
           <Upload
             id={'image'}
             listType='picture-card'
-            fileList={fileList}
+            fileList={uploadedFiles}
             onPreview={handlePreview}
-            onChange={(ev: any) => {
-              console.log(ev)
-              handleChange(ev)
-            }}>
-            {fileList.length >= 1 ? null : uploadButton}
+            onChange={handleChange}>
+            {uploadedFiles.length >= 3 ? null : uploadButton}
           </Upload>
-          {formik.touched.image && formik.errors.image ? (
-            <p className={styles.parentErrorMessage}>{formik.errors.image}</p>
+          {formik.touched.images && formik.errors.images ? (
+            <p className={styles.parentErrorMessage}>{formik.errors.images}</p>
           ) : null}
           <Modal
             open={previewOpen}

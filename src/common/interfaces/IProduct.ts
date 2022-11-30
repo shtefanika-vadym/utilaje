@@ -1,9 +1,11 @@
 export interface IProduct {
+  id: string
   price: number
   title: string
   description: string
   category: string
-  image: string
+  images: string[]
+  total?: number
 }
 
 export interface ICategory {

@@ -1,0 +1,61 @@
+@import 'src/styles/responsive';
+
+.parent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 4px;
+  width: 300px;
+  overflow: hidden;
+  min-height: 200px;
+  border: 1px solid var(--color-light-03);
+  position: relative;
+
+  &Content {
+    padding: 0 10px 10px 10px;
+  }
+
+  &Title {
+    width: 100%;
+    font-weight: 700;
+    text-align: center;
+    object-fit: contain;
+    padding: 25px 0 0 0;
+  }
+
+  &Image {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  &Description {
+    font-weight: 500;
+    padding: 5px 0 0 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  &Button {
+    width: 100%;
+  }
+
+  &Stock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 20px 0;
+    color: var(--color-success);
+  }
+
+  &Price {
+    font-weight: 700;
+    color: var(--color-primary-100);
+    @include adaptive-value('font-size', 24, 16, 0);
+    white-space: nowrap;
+  }
+}

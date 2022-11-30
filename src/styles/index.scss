@@ -1,4 +1,4 @@
-@import "responsive";
+@import 'responsive';
 
 * {
   margin: 0;
@@ -21,6 +21,37 @@
   background: #555;
 }
 
+.category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 120%;
+  column-gap: 5px;
+  text-transform: capitalize;
+  color: var(--color-dark-05);
+  @include adaptive-value('font-size', 14, 8, 0);
+  background-color: var(--color-light-02);
+  @include adaptive-value('padding-top', 10, 5, 0);
+  @include adaptive-value('padding-bottom', 10, 5, 0);
+  @include adaptive-value('padding-left', 14, 8, 0);
+  @include adaptive-value('padding-right', 14, 8, 0);
+  @include adaptive-value('border-radius', 20, 10, 0);
+}
+
+.message {
+  font-style: normal;
+  font-weight: 600;
+  @include adaptive-value('font-size', 18, 14, 0);
+  line-height: 140%;
+}
+
+.activeCategory {
+  color: var(--color-white);
+  background-color: var(--color-primary-100);
+}
 
 .parent {
   display: flex;
@@ -41,7 +72,8 @@
   width: 100%;
 }
 
-.ant-select-selection-search-input, .ant-input-affix-wrapper {
+.ant-select-selection-search-input,
+.ant-input-affix-wrapper {
   border: none !important;
   outline: none !important;
   width: 100% !important;
@@ -54,4 +86,44 @@
   line-height: 110%;
   @include adaptive-value('font-size', 14, 10, 0);
   color: var(--color-light-06);
+}
+
+.slick-dots .slick-dots-bottom {
+  position: absolute !important;
+}
+
+.ant-carousel .slick-dots li button {
+  background: var(--color-primary-100) !important;
+}
+
+.ant-carousel .slick-dots-bottom {
+  position: absolute !important;
+  bottom: -10px !important;
+}
+
+.ant-input-number {
+  @include adaptive-value('height', 40, 30, 0, true);
+  outline: none !important;
+  border: 1px solid #d1d1d6 !important;
+  border-radius: 6px 0 0 6px !important;
+}
+
+#price {
+  @include adaptive-value('height', 40, 25, 0, true);
+}
+
+input {
+  width: 100%;
+  height: 100%;
+  &::placeholder {
+    font-style: normal;
+    font-weight: 500;
+    line-height: 110%;
+    @include adaptive-value('font-size', 14, 10, 0);
+    color: var(--color-light-06);
+  }
+}
+
+.ant-input-number-group-addon {
+  border-radius: 0 6px 6px 0 !important;
 }

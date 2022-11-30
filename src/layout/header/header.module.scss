@@ -15,6 +15,12 @@
     @include adaptive-value('width', 80, 40, 0);
   }
 
+  &Default {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+  }
+
   &Content {
     width: 100%;
     display: flex;
@@ -23,33 +29,12 @@
     column-gap: 24px;
   }
 
-  &Cart {
-    font-style: normal;
-    font-weight: 700;
-    @include adaptive-value('font-size', 16, 10, 0);
-    line-height: 120%;
-    color: var(--color-white);
-  }
-
-  &Price {
-    @include adaptive-value('padding-right', 12, 6, 0);
-    border-right: 1px solid rgba(255, 255, 255, 0.25);
-  }
-
   &Sticky {
     box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.15);
   }
 
   &CartIcon {
     @include adaptive-value('width', 16, 10, 0);
-  }
-
-  &Total {
-    display: flex;
-    align-items: center;
-    @include adaptive-value('column-gap', 5, 2, 0);
-    @include adaptive-value('padding-left', 12, 6, 0);
-    @include adaptive-value('padding-left', 12, 6, 0);
   }
 
   &Btn {
@@ -63,5 +48,11 @@
     @include adaptive-value('padding-right', 23, 15, 0);
     @include adaptive-value('border-radius', 30, 10, 0);
     background-color: var(--color-primary-100);
+    font-style: normal;
+    font-weight: 700;
+    @include adaptive-value('font-size', 16, 10, 0);
+    line-height: 120%;
+    color: var(--color-white);
+    column-gap: 5px;
   }
 }

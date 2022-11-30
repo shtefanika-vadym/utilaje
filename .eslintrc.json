@@ -23,7 +23,6 @@
   "rules": {
     "curly": ["off"],
     "no-shadow": "off",
-    "no-loop-func": "off",
     "no-param-reassign": ["error", { "props": false }],
     "react-hooks/exhaustive-deps": "off",
     "no-underscore-dangle": "off",
@@ -48,8 +47,6 @@
           "module",
           "/assets/",
           "/common/",
-          "/pages/",
-          "/layout/",
           "/features/",
           ["parent", "sibling", "index", "absolute"]
         ],
@@ -57,19 +54,5 @@
       }
     ],
     "no-relative-import-paths/no-relative-import-paths": ["error", { "allowSameFolder": true }]
-  },
-  "overrides": [
-    {
-      "files": ["*constants.ts"],
-      "rules": {
-        "@typescript-eslint/naming-convention": [
-          "error",
-          {
-            "selector": "default",
-            "format": ["UPPER_CASE"]
-          }
-        ]
-      }
-    }
-  ]
+  }
 }

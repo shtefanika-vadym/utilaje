@@ -5,6 +5,8 @@ export enum ALT_IMG {
   SEARCH_ICON = 'Iconita de filtrare',
   LOGIN_BG = 'Autentificare imaginea reprezentativa',
   REMOVE_ICON = 'Iconita de stergere',
+  PRODUCT_IMAGE = 'Imaginea produsului',
+  CART_ICON = 'Iconita cartului',
 }
 
 export const UTILAJES_ADMIN_ACCESS_TOKEN = 'UTILAJES_ADMIN_ACCESS_TOKEN'
