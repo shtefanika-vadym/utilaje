@@ -1,13 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { ChangeEvent, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useToggle } from 'react-use'
 
-import classNames from 'classnames'
-import { db } from 'firebaseInit'
 import { PATHS } from 'layout/paths'
-import { UPDATE_CART, UPDATE_CATEGORIES } from 'store/products-slice'
+import { SET_SEARCH_VALUE, UPDATE_CART } from 'store/products-slice'
+
+import searchIcon from 'common/assets/search.svg'
 
 import { Button } from 'common/components/Button/Button'
+import { Input } from 'common/components/Input/Input'
+import { ALT_IMG } from 'common/constants/constants'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { ICategory, IProduct } from 'common/interfaces/IProduct'
 import { AuthService } from 'common/services/auth-service'
@@ -27,36 +29,10 @@ export const Home = () => {
   const [removedCategory, setRemovedCategory] = useState<ICategory | null>(null)
   const [isOpenRemoveModal, toggleIsOpenRemoveModal] = useToggle(false)
   const [isOpenAddCategory, toggleIsOpenAddCategory] = useToggle(false)
-  const [isFetchingCategories, toggleIsFetchingCategories] = useToggle(false)
 
   const [activeCategory, setActiveCategory] = useState<string>('toate')
-  const { categories, products, searchValue } = useAppSelector(
-    (state) => state.productsReducer,
-  )
-
-  // const firebaseCategories = useFirebaseTable('categories')
-  // const firebaseProducts = useFirebaseTable('products')
-
-  useEffect(() => {
-    const fetchCategoryData = async () => {
-      toggleIsFetchingCategories()
-      try {
-        const collectionRef = db.collection('categories')
-        await collectionRef.onSnapshot((docSnapshot) => {
-          const data = docSnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          })) as ICategory[]
-          dispatch(UPDATE_CATEGORIES(data))
-        })
-      } catch (e) {
-        console.error(e.message)
-      } finally {
-        toggleIsFetchingCategories()
-      }
-    }
-    fetchCategoryData()
-  }, [])
+  const { categories, products, searchValue, isFetchingProducts } =
+    useAppSelector((state) => state.productsReducer)
 
   const handleChangeCategory = (category: string): void => {
     setActiveCategory(category)
@@ -99,6 +75,12 @@ export const Home = () => {
     dispatch(UPDATE_CART(product))
   }
 
+  const handleChangeSearchValue = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    dispatch(SET_SEARCH_VALUE(event.target.value))
+  }
+
   return (
     <div className={styles.parent}>
       <RemoveCategoryModal
@@ -110,34 +92,37 @@ export const Home = () => {
         isOpen={isOpenAddCategory}
         onClose={toggleIsOpenAddCategory}
       />
-      <div className={styles.parentCategoriesContent}>
-        <div className={styles.parentCategories}>
-          <button
-            onClick={() => handleChangeCategory('toate')}
-            className={classNames(
-              'category',
-              'toate' === activeCategory && 'activeCategory',
-            )}>
-            {HOME_LABELS.ALL}
-          </button>
-          <CategoryList
-            categories={categories}
-            activeCategoryName={activeCategory}
-            handleDeleteCategory={handleDeleteCategory}
-            handleChangeCategory={handleChangeCategory}
-          />
+      {AuthService.getToken() && (
+        <div className={styles.parentManager}>
+          <Button modifier={'outline'} onClick={toggleIsOpenAddCategory}>
+            {HOME_LABELS.ADD_CATEGORY}
+          </Button>
+          <Button modifier={'primary'} onClick={handleNavigateToAddProducts}>
+            {HOME_LABELS.ADD_PRODUCT}
+          </Button>
         </div>
-        {AuthService.getToken() && (
-          <div className={styles.parentManager}>
-            <Button modifier={'outline'} onClick={toggleIsOpenAddCategory}>
-              {HOME_LABELS.ADD_CATEGORY}
-            </Button>
-            <Button modifier={'primary'} onClick={handleNavigateToAddProducts}>
-              {HOME_LABELS.ADD_PRODUCT}
-            </Button>
-          </div>
-        )}
+      )}
+      <div className={styles.parentSearch}>
+        <Input
+          name='filter'
+          value={searchValue}
+          onChange={handleChangeSearchValue}
+          suffix={
+            <img
+              src={searchIcon}
+              alt={ALT_IMG.SEARCH_ICON}
+              className={styles.parentSearchIcon}
+            />
+          }
+          placeholder='Cauta dupa numele produsului...'
+        />
       </div>
+      <CategoryList
+        categories={categories}
+        activeCategoryName={activeCategory}
+        handleDeleteCategory={handleDeleteCategory}
+        handleChangeCategory={handleChangeCategory}
+      />
       {!!products.length &&
       !isEmptyCategory &&
       !adjustedProducts.length &&
@@ -149,7 +134,7 @@ export const Home = () => {
         <ProductList
           products={adjustedProducts}
           onAddToCart={handleUpdateCart}
-          isFetching={isFetchingCategories}
+          isFetching={isFetchingProducts}
         />
       )}
     </div>

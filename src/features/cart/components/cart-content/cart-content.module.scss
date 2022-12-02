@@ -1,0 +1,85 @@
+@import 'src/styles/responsive';
+
+.parent {
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+  flex-direction: column;
+  padding: 40px 0 0 0;
+  margin: 0 auto;
+
+  @include device(smallOnly) {
+    width: 100%;
+  }
+
+  &Head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    @include device(extraSmall) {
+      flex-direction: column;
+      row-gap: 10px;
+    }
+  }
+
+  &HeadTitle,
+  &HeadClear {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+    white-space: nowrap;
+  }
+
+  &Order {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @include device(extraSmall) {
+      align-items: flex-start;
+      flex-direction: column;
+      row-gap: 10px;
+    }
+  }
+
+  &Price {
+    font-weight: 700;
+    color: var(--color-primary-100);
+  }
+
+  &TotalPrice {
+    font-style: normal;
+    font-weight: 400;
+    line-height: 120%;
+    @include adaptive-value('font-size', 22, 18, 0);
+  }
+
+  &HeadClear {
+    border: none;
+    cursor: pointer;
+    column-gap: 5px;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    color: var(--color-dark-01);
+  }
+
+  &OrderBtn {
+    @include device(extraSmall) {
+      width: 100%;
+    }
+  }
+
+  &Title {
+    text-align: center;
+    margin-bottom: 0;
+    font-style: normal;
+    font-weight: 700;
+    @include adaptive-value('font-size', 32, 20, 0);
+    line-height: 130%;
+  }
+}

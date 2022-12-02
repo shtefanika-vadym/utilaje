@@ -60,22 +60,39 @@ const Header: FC = () => {
     dispatch(SET_SEARCH_VALUE(event.target.value))
   }
 
+  const handleNavigateToHome = (): void => {
+    navigate(PATHS.HOME)
+  }
+
   return (
     <header ref={headerRef} className={styles.header}>
       <div className={styles.headerContent}>
         <div className={styles.headerDefault}>
-          <img
-            src={logo}
-            alt={ALT_IMG.APP_LOGO}
-            className={styles.headerLogo}
-          />
-          <Input
-            name='filter'
-            value={searchValue}
-            onChange={handleChangeSearchValue}
-            suffix={<img src={searchIcon} alt={ALT_IMG.SEARCH_ICON} />}
-            placeholder='Cauta dupa numele produsului...'
-          />
+          <button
+            className={styles.headerLogoBtn}
+            onClick={handleNavigateToHome}>
+            <img
+              src={logo}
+              alt={ALT_IMG.APP_LOGO}
+              className={styles.headerLogo}
+            />
+          </button>
+
+          <div className={styles.headerSearch}>
+            <Input
+              name='filter'
+              value={searchValue}
+              onChange={handleChangeSearchValue}
+              suffix={
+                <img
+                  src={searchIcon}
+                  alt={ALT_IMG.SEARCH_ICON}
+                  className={styles.headerSearchIcon}
+                />
+              }
+              placeholder='Caută dupa numele produsului...'
+            />
+          </div>
         </div>
 
         <button className={styles.headerBtn} onClick={handleGoToCart}>

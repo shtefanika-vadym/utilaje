@@ -16,7 +16,7 @@ export const GoBack = memo(() => {
   return (
     <button className={styles.parent} onClick={handleGoBack}>
       <img src={backIcon} alt={ALT_IMG.BACK_ICON} />
-      Acasa
+      Acasă
     </button>
   )
 })

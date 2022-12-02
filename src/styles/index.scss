@@ -3,6 +3,7 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: Inter, sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -32,13 +33,13 @@
   column-gap: 5px;
   text-transform: capitalize;
   color: var(--color-dark-05);
-  @include adaptive-value('font-size', 14, 8, 0);
+  @include adaptive-value('font-size', 14, 12, 0);
   background-color: var(--color-light-02);
   @include adaptive-value('padding-top', 10, 5, 0);
   @include adaptive-value('padding-bottom', 10, 5, 0);
   @include adaptive-value('padding-left', 14, 8, 0);
   @include adaptive-value('padding-right', 14, 8, 0);
-  @include adaptive-value('border-radius', 20, 10, 0);
+  @include adaptive-value('border-radius', 20, 15, 0);
 }
 
 .message {
@@ -102,10 +103,35 @@
 }
 
 .ant-input-number {
+  outline: none !important;
+  border: 1px solid #d1d1d6 !important;
+  border-radius: 6px !important;
+}
+
+.new-product-input-number .ant-input-number {
   @include adaptive-value('height', 40, 30, 0, true);
   outline: none !important;
   border: 1px solid #d1d1d6 !important;
   border-radius: 6px 0 0 6px !important;
+}
+
+.ant-input-number-focused {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ant-input-number-handler-wrap {
+  border-radius: 6px !important;
+}
+
+.total-input-number {
+  @include device(smallOnly) {
+    width: 70px !important;
+  }
+
+  @include device(extraSmall) {
+    width: 50px !important;
+  }
 }
 
 #price {

@@ -1,4 +1,12 @@
+@import 'src/styles/responsive';
+
 .parent {
   display: flex;
-  gap: 20px;
+  column-gap: 20px;
+  row-gap: 10px;
+  flex-wrap: wrap;
+
+  @include device(extraSmall) {
+    padding: 20px 0 0 0;
+  }
 }

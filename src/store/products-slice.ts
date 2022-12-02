@@ -4,6 +4,7 @@ import { ICategory, IProduct } from 'common/interfaces/IProduct'
 
 interface IProductsSlice {
   categories: ICategory[]
+  isFetchingProducts: boolean
   products: IProduct[]
   searchValue: string
   cart: IProduct[]
@@ -14,12 +15,17 @@ const initialState: IProductsSlice = {
   products: [],
   searchValue: '',
   cart: [],
+  isFetchingProducts: false,
 }
 
 export const products = createSlice({
   name: 'products',
   initialState: initialState,
   reducers: {
+    SET_IS_FETCHING_PRODUCTS(state, action: PayloadAction<boolean>) {
+      state.isFetchingProducts = action.payload
+    },
+
     UPDATE_CATEGORIES(state, action: PayloadAction<ICategory[]>) {
       state.categories = action.payload
     },
@@ -44,8 +50,25 @@ export const products = createSlice({
       else state.cart.push({ ...action.payload, total: 1 })
     },
 
+    UPDATE_TOTAL_PRODUCT(state, action: PayloadAction<IProduct>) {
+      state.cart = state.cart.map(
+        (product: IProduct): IProduct =>
+          product.id === action.payload.id ? action.payload : product,
+      )
+    },
+
     SET_SEARCH_VALUE(state, action: PayloadAction<string>) {
       state.searchValue = action.payload
+    },
+
+    SET_CART(state, action: PayloadAction<IProduct[]>) {
+      state.cart = action.payload
+    },
+
+    FILTER_CART(state, action: PayloadAction<IProduct>) {
+      state.cart = state.cart.filter(
+        (product: IProduct) => product.id !== action.payload.id,
+      )
     },
   },
 })
@@ -55,6 +78,10 @@ export default products.reducer
 export const {
   UPDATE_CATEGORIES,
   UPDATE_CART,
+  UPDATE_TOTAL_PRODUCT,
+  SET_CART,
+  FILTER_CART,
   SET_SEARCH_VALUE,
   UPDATE_PRODUCTS,
+  SET_IS_FETCHING_PRODUCTS,
 } = products.actions

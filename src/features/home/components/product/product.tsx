@@ -52,7 +52,7 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
           <span className={styles.parentPrice}>
             {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}Lei
           </span>
-          In stoc
+          În stoc
         </div>
         <Button modifier={'outline'} onClick={() => onAddToCart(product)}>
           {HOME_LABELS.ADD_TO_CART}

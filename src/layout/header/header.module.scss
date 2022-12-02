@@ -7,12 +7,18 @@
   background-color: var(--color-light-02);
   padding: 5px 32px 5px 32px;
   @include adaptive-value('min-height', 64, 40, 0);
-  z-index: 1;
+  z-index: 100;
   position: sticky;
   top: 0;
 
   &Logo {
-    @include adaptive-value('width', 80, 40, 0);
+    @include adaptive-value('width', 80, 50, 0);
+  }
+
+  &LogoBtn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
   }
 
   &Default {
@@ -34,7 +40,22 @@
   }
 
   &CartIcon {
-    @include adaptive-value('width', 16, 10, 0);
+    @include adaptive-value('width', 16, 14, 0);
+  }
+
+  &Search {
+    width: 350px;
+    @include device(smallOnly) {
+      width: 200px;
+    }
+
+    @include device(extraSmall) {
+      display: none;
+    }
+  }
+
+  &SearchIcon {
+    @include adaptive-value(width, 20, 15, 0);
   }
 
   &Btn {
@@ -42,15 +63,15 @@
     border: none;
     display: flex;
     align-items: center;
-    @include adaptive-value('padding-top', 15, 5, 0);
-    @include adaptive-value('padding-bottom', 15, 5, 0);
+    @include adaptive-value('padding-top', 15, 10, 0);
+    @include adaptive-value('padding-bottom', 15, 10, 0);
     @include adaptive-value('padding-left', 23, 15, 0);
     @include adaptive-value('padding-right', 23, 15, 0);
     @include adaptive-value('border-radius', 30, 10, 0);
     background-color: var(--color-primary-100);
     font-style: normal;
     font-weight: 700;
-    @include adaptive-value('font-size', 16, 10, 0);
+    @include adaptive-value('font-size', 16, 14, 0);
     line-height: 120%;
     color: var(--color-white);
     column-gap: 5px;

@@ -103,7 +103,7 @@ export const NewProduct = () => {
   const uploadButton = (
     <div>
       <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Incarca</div>
+      <div style={{ marginTop: 8 }}>Încarcă</div>
     </div>
   )
 
@@ -162,7 +162,8 @@ export const NewProduct = () => {
             addonAfter='Lei'
             // @ts-ignore
             value={formik.values.price}
-            placeholder='Pretul produsului'
+            placeholder='Prețul produsului'
+            className='new-product-input-number'
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             }
@@ -213,7 +214,7 @@ export const NewProduct = () => {
 
         <div>
           <label className={styles.parentLabel} htmlFor='image'>
-            Imagine
+            Imagini
           </label>
           <Upload
             id={'image'}
@@ -237,7 +238,7 @@ export const NewProduct = () => {
 
         <div className={styles.parentSubmit}>
           <Button htmlType='submit' modifier='primary'>
-            Adauga produsul
+            Adaugă produsul
           </Button>
         </div>
       </form>

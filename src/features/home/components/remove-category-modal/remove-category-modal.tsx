@@ -27,7 +27,7 @@ export const RemoveCategoryModal: FC<IProps> = ({
       await db.collection('categories').doc(category.id).delete()
       dispatch(
         UPDATE_ALERT_INFO({
-          title: 'Stergere categorie',
+          title: 'Ștergere categorie',
           description: `Categoria ${category.category} a fost creata cu succes.`,
         }),
       )
@@ -35,7 +35,7 @@ export const RemoveCategoryModal: FC<IProps> = ({
     } catch (e) {
       dispatch(
         UPDATE_ALERT_INFO({
-          title: 'Eroarea la stergerea categoriei.',
+          title: 'Eroarea la ștergerea categoriei.',
           description: e.message,
         }),
       )
@@ -48,20 +48,20 @@ export const RemoveCategoryModal: FC<IProps> = ({
   return (
     <Modal
       open={isOpen}
-      title={'Confirma stergerea'}
+      title={'Confirmă ștergerea'}
       footer={null}
       onCancel={onClose}>
       <div className={styles.parent}>
         <h3 className={styles.parentRemoveMessage}>
-          Daca confirmi stergerea catregoriei "{category?.category}" automat vor
-          fi sterse si toate produsele din aceasta categorie.
+          Dacă confirmi ștergerea categoriei "{category?.category}" automat vor
+          fi șterse toate produsele din această categorie.
         </h3>
         <div className={styles.parentConfirm}>
           <Button modifier={'outline'} onClick={onClose}>
-            Inapoi
+            Înapoi
           </Button>
           <Button modifier={'primary'} onClick={onRemove}>
-            Sterge
+            Șterge
           </Button>
         </div>
       </div>

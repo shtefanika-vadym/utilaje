@@ -2,27 +2,30 @@
 
 .parent {
   max-width: 1920px;
-  padding: 0 40px 0 40px;
+  @include adaptive-value('padding', 40, 20, 0);
   margin: 0 auto;
-
-  &Categories {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
 
   &Manager {
     display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     column-gap: 20px;
+    row-gap: 10px;
+    padding: 0 0 20px 0;
+
+    @include device(extraSmall) {
+      flex-direction: column;
+    }
   }
 
-  &CategoriesContent {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 50px 0 0 0;
-    column-gap: 100px;
-    row-gap: 20px;
+  &Search {
+    display: none;
+    @include device(extraSmall) {
+      display: unset;
+    }
+  }
+
+  &SearchIcon {
+    @include adaptive-value(width, 20, 15, 0);
   }
 }

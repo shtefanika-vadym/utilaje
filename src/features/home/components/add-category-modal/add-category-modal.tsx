@@ -26,15 +26,15 @@ export const AddCategoryModal: FC<IProps> = ({ isOpen, onClose }) => {
         await db.collection('categories').add({ category: category })
         dispatch(
           UPDATE_ALERT_INFO({
-            title: 'Categorie creata.',
-            description: `Categoria ${category} a fost creata cu succes.`,
+            title: 'Categorie creată.',
+            description: `Categoria ${category} a fost creată cu succes.`,
           }),
         )
         setCategory('')
       } catch (e) {
         dispatch(
           UPDATE_ALERT_INFO({
-            title: 'Eroarea la crearea categorie.',
+            title: 'Eroarea la crearea categoriei.',
             description: e.message,
           }),
         )
@@ -54,10 +54,10 @@ export const AddCategoryModal: FC<IProps> = ({ isOpen, onClose }) => {
       open={isOpen}
       footer={null}
       onCancel={onClose}
-      title={'Creaza o categorie'}>
+      title={'Crează o categorie'}>
       <div className={styles.parent}>
         <h3 className={styles.parentRemoveMessage}>
-          Creaza o categorie noua si apoi poti crea produse pentru aceasta
+          Crează o categorie nouă și apoi poți crea produse pentru această
           categorie
         </h3>
         <Input
@@ -69,10 +69,10 @@ export const AddCategoryModal: FC<IProps> = ({ isOpen, onClose }) => {
         />
         <div className={styles.parentConfirm}>
           <Button modifier={'outline'} onClick={onClose}>
-            Inapoi
+            Înapoi
           </Button>
           <Button modifier={'primary'} onClick={onCreate}>
-            Creaza
+            Crează
           </Button>
         </div>
       </div>

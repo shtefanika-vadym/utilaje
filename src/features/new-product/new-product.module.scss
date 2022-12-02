@@ -2,8 +2,8 @@
 
 .parent {
   max-width: 1920px;
-  padding: 40px;
   margin: 0 auto;
+  @include adaptive-value('padding', 40, 20, 0);
 
   &Title {
     font-style: normal;
@@ -48,9 +48,10 @@
     border: 1px solid #d1d1d6;
     border-radius: 6px;
     overflow: hidden;
-    height: 80px !important;
+    min-height: 80px;
+    max-height: 100px;
     padding: 12px 12px 12px 12px;
-    overflow-y: scroll;
+    overflow-y: auto;
     outline: none;
 
     &::placeholder {
