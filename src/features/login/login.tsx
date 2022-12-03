@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from 'firebaseInit'
 import { FormikValues, useFormik } from 'formik'
+import { PATHS } from 'layout/paths'
 import * as Yup from 'yup'
 
 import logo from 'common/assets/logo-line.svg'
@@ -13,8 +14,6 @@ import { Button } from 'common/components/Button/Button'
 import { Input } from 'common/components/Input/Input'
 import { ALT_IMG, BUTTON_LABELS } from 'common/constants/constants'
 import { AuthService } from 'common/services/auth-service'
-
-import { PATHS } from 'layout/paths'
 
 import { LOGIN_LABELS } from 'features/login/constants/constants'
 

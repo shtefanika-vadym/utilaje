@@ -35,32 +35,12 @@
     color: var(--color-dark-06);
     margin-bottom: 0;
     padding: 0 0 4px 0;
-    @include adaptive-value('font-size', 13, 10, 0);
+    @include adaptive-value('font-size', 13, 12, 0);
   }
 
   &Field {
     display: flex;
     flex-direction: column;
-  }
-
-  &TextArea {
-    resize: none;
-    border: 1px solid #d1d1d6;
-    border-radius: 6px;
-    overflow: hidden;
-    min-height: 80px;
-    max-height: 100px;
-    padding: 12px 12px 12px 12px;
-    overflow-y: auto;
-    outline: none;
-
-    &::placeholder {
-      font-style: normal;
-      font-weight: 500;
-      line-height: 110%;
-      @include adaptive-value('font-size', 14, 10, 0);
-      color: var(--color-light-06);
-    }
   }
 
   &ErrorMessage {

@@ -12,7 +12,7 @@ import { IProduct } from 'common/interfaces/IProduct'
 import { HOME_LABELS } from 'features/home/constants/constants'
 
 import styles from './product.module.scss'
-import 'antd/lib/carousel/style/css'
+import { AuthService } from 'common/services/auth-service'
 
 interface IProps {
   product: IProduct
@@ -23,7 +23,11 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
   const navigate = useNavigate()
 
   const handleNavigateToProduct = (): void => {
-    navigate(`produse/${product.id}`)
+    navigate(`/produse/${product.id}`)
+  }
+
+  const handleUpdateProduct = (): void => {
+    navigate(`/produse/modificare/${product.id}`)
   }
 
   return (
@@ -43,7 +47,10 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
         </Carousel>
         <div className={styles.parentContent}>
           <div className={styles.parentTitle}>{product.title}</div>
-          <p className={styles.parentDescription}>{product.description}</p>
+          <div
+            className={styles.parentDescription}
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          />
         </div>
       </div>
 
@@ -54,9 +61,16 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
           </span>
           În stoc
         </div>
-        <Button modifier={'outline'} onClick={() => onAddToCart(product)}>
-          {HOME_LABELS.ADD_TO_CART}
-        </Button>
+        <div className={styles.parentBtns}>
+          <Button modifier={'outline'} onClick={() => onAddToCart(product)}>
+            {HOME_LABELS.ADD_TO_CART}
+          </Button>
+          {AuthService.getToken() && (
+            <Button modifier={'outline'} onClick={handleUpdateProduct}>
+              {HOME_LABELS.UPDATE}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )

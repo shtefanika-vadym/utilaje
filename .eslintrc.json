@@ -3,7 +3,12 @@
     "browser": true,
     "es2021": true
   },
-  "extends": ["react-app", "prettier", "react-app/jest", "plugin:css-modules/recommended"],
+  "extends": [
+    "react-app",
+    "prettier",
+    "react-app/jest",
+    "plugin:css-modules/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -23,36 +28,64 @@
   "rules": {
     "curly": ["off"],
     "no-shadow": "off",
-    "no-param-reassign": ["error", { "props": false }],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
     "react-hooks/exhaustive-deps": "off",
     "no-underscore-dangle": "off",
     "no-console": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
-    "no-multiple-empty-lines": ["error", { "max": 2 }],
-    "css-modules/no-unused-class": [2, { "camelCase": true }],
-    "css-modules/no-undef-class": [2, { "camelCase": true }],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 2
+      }
+    ],
+    "css-modules/no-unused-class": [
+      2,
+      {
+        "camelCase": true
+      }
+    ],
+    "css-modules/no-undef-class": [
+      2,
+      {
+        "camelCase": true
+      }
+    ],
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
       }
     ],
-    "import-helpers/order-imports": [
+//    "import-helpers/order-imports": [
+//      "error",
+//      {
+//        "newlinesBetween": "always",
+//        "groups": [
+//          "/^react.*/",
+//          "module",
+//          "/assets/",
+//          "/common/",
+//          "/features/",
+//          ["parent", "sibling", "index", "absolute"]
+//        ],
+//        "alphabetize": {
+//          "order": "asc",
+//          "ignoreCase": true
+//        }
+//      }
+//    ],
+    "no-relative-import-paths/no-relative-import-paths": [
       "error",
       {
-        "newlinesBetween": "always",
-        "groups": [
-          "/^react.*/",
-          "module",
-          "/assets/",
-          "/common/",
-          "/features/",
-          ["parent", "sibling", "index", "absolute"]
-        ],
-        "alphabetize": { "order": "asc", "ignoreCase": true }
+        "allowSameFolder": true
       }
-    ],
-    "no-relative-import-paths/no-relative-import-paths": ["error", { "allowSameFolder": true }]
+    ]
   }
 }

@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { PATHS } from 'layout/paths'
 import {
   FILTER_CART,
   SET_CART,
@@ -20,6 +22,7 @@ import { CART_LABELS } from 'features/cart/constants/constants'
 import styles from './cart-content.module.scss'
 
 export const CartContent = () => {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { cart } = useAppSelector((state) => state.productsReducer)
 
@@ -47,6 +50,10 @@ export const CartContent = () => {
     dispatch(UPDATE_TOTAL_PRODUCT({ ...product, total: total }))
   }
 
+  const handleOrderNow = (): void => {
+    navigate(PATHS.ORDER_NOW)
+  }
+
   return (
     <div className={styles.parent}>
       <div className={styles.parentHead}>
@@ -71,7 +78,9 @@ export const CartContent = () => {
           <span className={styles.parentPrice}>{cartPrice} Lei</span>
         </span>
         <span className={styles.parentOrderBtn}>
-          <Button modifier='primary'>{CART_LABELS.ORDER_NOW}</Button>
+          <Button modifier='primary' onClick={handleOrderNow}>
+            {CART_LABELS.ORDER_NOW}
+          </Button>
         </span>
       </div>
     </div>

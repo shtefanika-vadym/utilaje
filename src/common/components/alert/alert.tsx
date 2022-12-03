@@ -9,8 +9,6 @@ import { IAlert } from 'common/interfaces/IAlert'
 
 import styles from './alerts.module.scss'
 
-import 'antd/lib/alert/style/css'
-
 export const Alert: FC<IAlert> = ({ title, description, onClose }) => (
   <AntAlert
     closable

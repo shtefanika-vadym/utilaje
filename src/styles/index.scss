@@ -85,7 +85,7 @@
   font-style: normal;
   font-weight: 500;
   line-height: 110%;
-  @include adaptive-value('font-size', 14, 10, 0);
+  @include adaptive-value('font-size', 14, 13, 0);
   color: var(--color-light-06);
 }
 
@@ -145,11 +145,23 @@ input {
     font-style: normal;
     font-weight: 500;
     line-height: 110%;
-    @include adaptive-value('font-size', 14, 10, 0);
+    @include adaptive-value('font-size', 14, 13, 0);
     color: var(--color-light-06);
   }
 }
 
 .ant-input-number-group-addon {
   border-radius: 0 6px 6px 0 !important;
+}
+
+.ql-toolbar.ql-snow {
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.ql-container.ql-snow {
+  border-radius: 0 0 6px 6px;
+}
+
+li {
+  list-style-position: inside;
 }

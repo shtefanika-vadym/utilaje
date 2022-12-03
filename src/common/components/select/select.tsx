@@ -10,8 +10,6 @@ import { ISelect } from 'common/interfaces/ISelect'
 
 import styles from './select.module.scss'
 
-import 'antd/lib/select/style/css'
-
 const { Option } = AntSelect
 
 export const Select: FC<ISelect> = ({

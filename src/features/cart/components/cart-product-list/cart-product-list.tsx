@@ -1,7 +1,5 @@
 import React, { FC } from 'react'
 
-import { nanoid } from 'nanoid'
-
 import { IProduct } from 'common/interfaces/IProduct'
 
 import { CartProduct } from 'features/cart/components/cart-product/cart-product'
@@ -22,7 +20,7 @@ export const CartProductList: FC<IProps> = ({
   <div className={styles.parent}>
     {products.map(
       (product: IProduct): JSX.Element => (
-        <React.Fragment key={nanoid()}>
+        <React.Fragment key={product.id}>
           <CartProduct
             product={product}
             handleRemoveProduct={handleRemoveProduct}

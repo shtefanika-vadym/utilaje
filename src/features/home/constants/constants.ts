@@ -1,5 +1,6 @@
 export enum HOME_LABELS {
   ALL = 'Toate',
+  UPDATE = 'Modifică',
   ADD_TO_CART = 'Adaugă in coș',
   ADD_CATEGORY = 'Adaugă o categorie',
   ADD_PRODUCT = 'Adaugă un produs',

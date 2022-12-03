@@ -9,7 +9,6 @@ import { UtilService } from 'common/services/services'
 // I suppress next line with eslint-disable-next-line because i use dynamic class
 // eslint-disable-next-line css-modules/no-unused-class
 import styles from './button.module.scss'
-import 'antd/lib/button/style/css'
 
 interface IProps extends NativeButtonProps {
   children: JSX.Element | string

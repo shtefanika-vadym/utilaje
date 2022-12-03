@@ -52,6 +52,13 @@
     color: var(--color-success);
   }
 
+  &Btns {
+    width: 100%;
+    display: flex;
+    column-gap: 10px;
+    align-content: center;
+  }
+
   &Price {
     font-weight: 700;
     color: var(--color-primary-100);

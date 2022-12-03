@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import { PlusOutlined } from '@ant-design/icons'
 import { InputNumber, Modal, Upload, UploadFile } from 'antd'
@@ -10,16 +10,18 @@ import { PATHS } from 'layout/paths'
 import { nanoid } from 'nanoid'
 import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 import * as Yup from 'yup'
+import ReactQuill from 'react-quill'
 
 import { Button } from 'common/components/Button/Button'
 import { GoBack } from 'common/components/go-back/go-back'
 import { Input } from 'common/components/Input/Input'
 import { Select } from 'common/components/select/select'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
-import { ICategory } from 'common/interfaces/IProduct'
+import { ICategory, IProduct } from 'common/interfaces/IProduct'
 import { AuthService } from 'common/services/auth-service'
 
 import styles from './new-product.module.scss'
+import 'react-quill/dist/quill.snow.css'
 
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -30,11 +32,22 @@ const getBase64 = (file: RcFile): Promise<string> =>
   })
 
 export const NewProduct = () => {
+  const params = useParams()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { categories } = useAppSelector((state) => state.productsReducer)
+
+  const { categories, products } = useAppSelector(
+    (state) => state.productsReducer,
+  )
+
+  const product = useMemo(
+    (): IProduct | undefined =>
+      products.find((product: IProduct): boolean => product.id === params.id),
+    [params.id],
+  )
+
   const formik = useFormik({
-    initialValues: {
+    initialValues: product || {
       price: '',
       title: '',
       category: '',
@@ -50,36 +63,64 @@ export const NewProduct = () => {
         .test({
           message: 'Minim 2 imagini',
           test: (arr) => {
-            console.log(arr)
             return arr?.length >= 2
           },
         }),
       category: Yup.string().required('Categoria este obligatorie.'),
     }),
     onSubmit: async (values: FormikValues) => {
-      try {
-        await db.collection('products').add({ ...values, id: nanoid() })
-        navigate(-1)
-        dispatch(
-          UPDATE_ALERT_INFO({
-            title: 'Produs creat',
-            description: 'Produs creat cu succes',
-          }),
-        )
-      } catch (e) {
-        dispatch(
-          UPDATE_ALERT_INFO({
-            title: 'Eroare la cearea produsului',
-            description: e.message,
-          }),
-        )
-      } finally {
-        setTimeout(() => {
-          dispatch(UPDATE_ALERT_INFO(null))
-        }, 3000)
-      }
+      if (params?.id) handleUpdateProduct(values)
+      else handleCreateProduct(values)
     },
   })
+
+  const handleUpdateProduct = async (values: FormikValues): Promise<void> => {
+    try {
+      await db.collection('products').doc(values.id).update(values)
+      navigate(-1)
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Produs modificat',
+          description: 'Produsul a fost modificat cu succes',
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Eroare la modificarea produsului',
+          description: e.message,
+        }),
+      )
+    } finally {
+      setTimeout(() => {
+        dispatch(UPDATE_ALERT_INFO(null))
+      }, 3000)
+    }
+  }
+
+  const handleCreateProduct = async (values: FormikValues): Promise<void> => {
+    try {
+      await db.collection('products').add({ ...values, id: nanoid() })
+      navigate(-1)
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Produs creat',
+          description: 'Produs creat cu succes',
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Eroare la cearea produsului',
+          description: e.message,
+        }),
+      )
+    } finally {
+      setTimeout(() => {
+        dispatch(UPDATE_ALERT_INFO(null))
+      }, 3000)
+    }
+  }
 
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
@@ -130,14 +171,16 @@ export const NewProduct = () => {
     [categories],
   )
 
-  if (!AuthService.getToken()) return <Navigate to={PATHS.HOME} />
+  if (!AuthService.getToken() || !product) return <Navigate to={PATHS.HOME} />
   return (
     <div className={styles.parent}>
       <div className={styles.parentHead}>
         <GoBack />
       </div>
       <form className={styles.parentForm} onSubmit={formik.handleSubmit}>
-        <h1 className={styles.parentTitle}>Adaugarea unui produs</h1>
+        <h1 className={styles.parentTitle}>
+          {params.id ? 'Modificarea produsului' : 'Adaugarea unui produs'}
+        </h1>
         <div>
           <Input
             type='text'
@@ -153,7 +196,7 @@ export const NewProduct = () => {
           ) : null}
         </div>
         <div className={styles.parentField}>
-          <label className={styles.parentLabel} htmlFor='description'>
+          <label className={styles.parentLabel} htmlFor='price'>
             Pret
           </label>
           <InputNumber
@@ -197,13 +240,13 @@ export const NewProduct = () => {
           <label className={styles.parentLabel} htmlFor='description'>
             Descriere
           </label>
-          <textarea
+          <ReactQuill
+            theme='snow'
             id={'description'}
-            name={'description'}
-            onChange={formik.handleChange}
             value={formik.values.description}
-            placeholder={'Descrierea produsului'}
-            className={styles.parentTextArea}
+            onChange={(value: string) =>
+              formik.setFieldValue('description', value)
+            }
           />
           {formik.touched.description && formik.errors.description ? (
             <p className={styles.parentErrorMessage}>
@@ -238,7 +281,7 @@ export const NewProduct = () => {
 
         <div className={styles.parentSubmit}>
           <Button htmlType='submit' modifier='primary'>
-            Adaugă produsul
+            {params.id ? 'Modifică' : 'Adaugă produsul'}
           </Button>
         </div>
       </form>
