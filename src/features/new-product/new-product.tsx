@@ -18,7 +18,6 @@ import { Input } from 'common/components/Input/Input'
 import { Select } from 'common/components/select/select'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { ICategory, IProduct } from 'common/interfaces/IProduct'
-import { AuthService } from 'common/services/auth-service'
 
 import styles from './new-product.module.scss'
 import 'react-quill/dist/quill.snow.css'
@@ -36,7 +35,7 @@ export const NewProduct = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const { categories, products } = useAppSelector(
+  const { categories, products, user } = useAppSelector(
     (state) => state.productsReducer,
   )
 
@@ -204,8 +203,7 @@ export const NewProduct = () => {
     }
   }
 
-  if (!AuthService.getToken() || (!product && params?.id))
-    return <Navigate to={PATHS.HOME} />
+  if (!user || (!product && params?.id)) return <Navigate to={PATHS.HOME} />
   return (
     <div className={styles.parent}>
       <GoBack />

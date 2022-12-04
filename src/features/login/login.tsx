@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import {
+  browserSessionPersistence,
+  setPersistence,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 import { auth } from 'firebaseInit'
 import { FormikValues, useFormik } from 'formik'
 import { PATHS } from 'layout/paths'
@@ -13,13 +17,14 @@ import loginBg from 'features/login/assets/login-bg.svg'
 import { Button } from 'common/components/Button/Button'
 import { Input } from 'common/components/Input/Input'
 import { ALT_IMG, BUTTON_LABELS } from 'common/constants/constants'
-import { AuthService } from 'common/services/auth-service'
 
 import { LOGIN_LABELS } from 'features/login/constants/constants'
 
 import styles from './login.module.scss'
+import { useAppSelector } from 'common/hooks/redux'
 
 export const Login = () => {
+  const { user } = useAppSelector((state) => state.productsReducer)
   const [loginError, setLoginError] = useState<string | null>(null)
   const formik = useFormik({
     initialValues: {
@@ -34,12 +39,17 @@ export const Login = () => {
     }),
     onSubmit: async (values: FormikValues) => {
       try {
-        const credentials = await signInWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password,
-        )
-        AuthService.setToken(credentials.user.refreshToken)
+        setPersistence(auth, browserSessionPersistence)
+          .then(() => {
+            return signInWithEmailAndPassword(
+              auth,
+              values.email,
+              values.password,
+            )
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       } catch (e) {
         let errorMessage = e.message.split('/')
         errorMessage = errorMessage[errorMessage.length - 1]
@@ -50,7 +60,7 @@ export const Login = () => {
     },
   })
 
-  if (AuthService.getToken()) return <Navigate to={PATHS.HOME} replace />
+  if (user) return <Navigate to={PATHS.HOME} replace />
 
   return (
     <div className={styles.parent}>

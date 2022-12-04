@@ -11,12 +11,14 @@ import { HOME_LABELS } from 'features/home/constants/constants'
 import styles from './product-list.module.scss'
 
 interface IProps {
+  user: any
   isFetching: boolean
   products: IProduct[]
   onAddToCart: (product: IProduct) => void
 }
 
 export const ProductList: FC<IProps> = ({
+  user,
   products,
   isFetching,
   onAddToCart,
@@ -62,7 +64,7 @@ export const ProductList: FC<IProps> = ({
       products.map(
         (product: IProduct): JSX.Element => (
           <React.Fragment key={nanoid()}>
-            <Product product={product} onAddToCart={onAddToCart} />
+            <Product user={user} product={product} onAddToCart={onAddToCart} />
           </React.Fragment>
         ),
       )

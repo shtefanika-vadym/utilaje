@@ -59,7 +59,7 @@ export const CartContent = () => {
     {
       title: 'Produs',
       dataIndex: 'title',
-      width: 130,
+      width: 430,
       fixed: 'left',
       key: 'title',
     },
@@ -96,6 +96,7 @@ export const CartContent = () => {
       key: 'action',
       dataIndex: 'id',
       fixed: 'right',
+      width: 100,
 
       render: (id: string) => {
         return (

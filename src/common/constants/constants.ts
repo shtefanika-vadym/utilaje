@@ -10,6 +10,7 @@ export enum ALT_IMG {
 }
 
 export const UTILAJES_ADMIN_ACCESS_TOKEN = 'UTILAJES_ADMIN_ACCESS_TOKEN'
+export const UTILAJES_ADMIN_USER = 'UTILAJES_ADMIN_USER'
 
 export enum BUTTON_LABELS {
   LOGIN = 'Logare',

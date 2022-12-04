@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { ICategory, IProduct } from 'common/interfaces/IProduct'
-
 interface IProductsSlice {
   categories: ICategory[]
   isFetchingProducts: boolean
   products: IProduct[]
   searchValue: string
   cart: IProduct[]
+  user: any
 }
 
 const initialState: IProductsSlice = {
@@ -16,6 +16,7 @@ const initialState: IProductsSlice = {
   searchValue: '',
   cart: [],
   isFetchingProducts: false,
+  user: null,
 }
 
 export const products = createSlice({
@@ -65,6 +66,10 @@ export const products = createSlice({
       state.cart = action.payload
     },
 
+    SET_USER(state, action: PayloadAction<any>) {
+      state.user = action.payload
+    },
+
     FILTER_CART(state, action: PayloadAction<string>) {
       state.cart = state.cart.filter(
         (product: IProduct) => product.id !== action.payload,
@@ -80,6 +85,7 @@ export const {
   UPDATE_CART,
   UPDATE_TOTAL_PRODUCT,
   SET_CART,
+  SET_USER,
   FILTER_CART,
   SET_SEARCH_VALUE,
   UPDATE_PRODUCTS,

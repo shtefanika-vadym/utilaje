@@ -6,9 +6,9 @@ import removeIcon from 'common/assets/REMOVE.svg'
 
 import { ALT_IMG } from 'common/constants/constants'
 import { ICategory } from 'common/interfaces/IProduct'
-import { AuthService } from 'common/services/auth-service'
 
 interface IProps {
+  user: any
   category: ICategory
   activeCategoryName: string
   handleChangeCategory: (categoryName: string) => void
@@ -16,6 +16,7 @@ interface IProps {
 }
 
 export const Category: FC<IProps> = ({
+  user,
   category,
   activeCategoryName,
   handleChangeCategory,
@@ -28,7 +29,7 @@ export const Category: FC<IProps> = ({
       category.category === activeCategoryName && 'activeCategory',
     )}>
     {category.category}
-    {AuthService.getToken() && (
+    {user && (
       <img
         src={removeIcon}
         alt={ALT_IMG.REMOVE_ICON}

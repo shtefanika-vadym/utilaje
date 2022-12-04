@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 
 import { Table, Tabs } from 'antd'
-import { AuthService } from 'common/services/auth-service'
 import { HomeContent } from 'features/home/components/home-content/home-content'
 import { useFirebaseTable } from 'common/hooks/hooks'
 
@@ -12,8 +11,10 @@ import { db } from 'firebaseInit'
 import { Button } from 'common/components/Button/Button'
 import { ColumnsType } from 'antd/es/table'
 import { nanoid } from 'nanoid'
+import { useAppSelector } from 'common/hooks/redux'
 
 export const Home = () => {
+  const { user } = useAppSelector((state) => state.productsReducer)
   const ordersFirebase = useFirebaseTable('orders')
 
   useEffect(() => {
@@ -193,7 +194,12 @@ export const Home = () => {
     [ordersFirebase.data],
   )
 
-  if (!AuthService.getToken()) return <HomeContent />
+  if (!user)
+    return (
+      <div className={styles.parent}>
+        <HomeContent />
+      </div>
+    )
 
   return (
     <div className={styles.parent}>

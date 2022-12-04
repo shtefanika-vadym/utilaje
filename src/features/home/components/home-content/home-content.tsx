@@ -12,7 +12,6 @@ import { Input } from 'common/components/Input/Input'
 import { ALT_IMG } from 'common/constants/constants'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { ICategory, IProduct } from 'common/interfaces/IProduct'
-import { AuthService } from 'common/services/auth-service'
 
 import { AddCategoryModal } from 'features/home/components/add-category-modal/add-category-modal'
 import { CategoryList } from 'features/home/components/category-list/category-list'
@@ -31,7 +30,7 @@ export const HomeContent = () => {
   const [isOpenAddCategory, toggleIsOpenAddCategory] = useToggle(false)
 
   const [activeCategory, setActiveCategory] = useState<string>('toate')
-  const { categories, products, searchValue, isFetchingProducts } =
+  const { categories, products, user, searchValue, isFetchingProducts } =
     useAppSelector((state) => state.productsReducer)
 
   const handleChangeCategory = (category: string): void => {
@@ -92,7 +91,7 @@ export const HomeContent = () => {
         isOpen={isOpenAddCategory}
         onClose={toggleIsOpenAddCategory}
       />
-      {AuthService.getToken() && (
+      {user && (
         <div className={styles.parentManager}>
           <Button modifier={'outline'} onClick={toggleIsOpenAddCategory}>
             {HOME_LABELS.ADD_CATEGORY}
@@ -118,6 +117,7 @@ export const HomeContent = () => {
         />
       </div>
       <CategoryList
+        user={user}
         categories={categories}
         activeCategoryName={activeCategory}
         handleDeleteCategory={handleDeleteCategory}
@@ -132,6 +132,7 @@ export const HomeContent = () => {
         </p>
       ) : (
         <ProductList
+          user={user}
           products={adjustedProducts}
           onAddToCart={handleUpdateCart}
           isFetching={isFetchingProducts}

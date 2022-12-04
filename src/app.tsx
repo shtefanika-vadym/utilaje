@@ -8,6 +8,7 @@ import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 import {
   SET_CART,
   SET_IS_FETCHING_PRODUCTS,
+  SET_USER,
   UPDATE_CATEGORIES,
   UPDATE_PRODUCTS,
 } from 'store/products-slice'
@@ -16,6 +17,7 @@ import { IProduct } from './common/interfaces/IProduct'
 import { Alert } from 'common/components/alert/alert'
 import { useFirebaseTable } from 'common/hooks/hooks'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
+import { auth } from 'firebaseInit'
 
 export const App = () => {
   const location = useLocation()
@@ -32,6 +34,9 @@ export const App = () => {
   )
 
   useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      dispatch(SET_USER(user))
+    })
     if (Array.isArray(JSON.parse(cartLocaleStorage)))
       dispatch(SET_CART(JSON.parse(cartLocaleStorage)))
   }, [])
@@ -56,6 +61,18 @@ export const App = () => {
   useEffect(() => {
     firebaseCategories.createRequest()
     firebaseProducts.createRequest()
+    // window.setInterval(() => {
+    //   const user = AuthService.getUser()
+    //   if (
+    //     AuthService.getToken() &&
+    //     user &&
+    //     new Date(user.stsTokenManager.expirationTime) < new Date()
+    //   )
+    //     auth.
+    // }, 10000)
+    return () => {
+      window.clearInterval(10000)
+    }
   }, [])
 
   useEffect(() => {

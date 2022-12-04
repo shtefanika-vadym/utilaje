@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { Carousel } from 'antd'
 import classNames from 'classnames'
-import { nanoid } from 'nanoid'
 
 import { Button } from 'common/components/Button/Button'
 import { ALT_IMG } from 'common/constants/constants'
@@ -12,14 +11,14 @@ import { IProduct } from 'common/interfaces/IProduct'
 import { HOME_LABELS } from 'features/home/constants/constants'
 
 import styles from './product.module.scss'
-import { AuthService } from 'common/services/auth-service'
 
 interface IProps {
+  user: any
   product: IProduct
   onAddToCart: (product: IProduct) => void
 }
 
-export const Product: FC<IProps> = ({ product, onAddToCart }) => {
+export const Product: FC<IProps> = ({ user, product, onAddToCart }) => {
   const navigate = useNavigate()
 
   const handleNavigateToProduct = (): void => {
@@ -35,7 +34,7 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
       <div>
         <Carousel dotPosition={'bottom'}>
           {product.images.map((image: any) => (
-            <div key={nanoid()}>
+            <div key={image?.url}>
               <img
                 src={image?.url}
                 alt={ALT_IMG.PRODUCT_IMAGE}
@@ -65,7 +64,7 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
           <Button modifier={'outline'} onClick={() => onAddToCart(product)}>
             {HOME_LABELS.ADD_TO_CART}
           </Button>
-          {AuthService.getToken() && (
+          {user && (
             <Button modifier={'outline'} onClick={handleUpdateProduct}>
               {HOME_LABELS.UPDATE}
             </Button>

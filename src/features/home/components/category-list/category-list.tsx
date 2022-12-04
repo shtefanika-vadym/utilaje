@@ -11,6 +11,7 @@ import { HOME_LABELS } from 'features/home/constants/constants'
 import styles from './category-list.module.scss'
 
 interface IProps {
+  user: any
   categories: ICategory[]
   activeCategoryName: string
   handleChangeCategory: (categoryName: string) => void
@@ -18,6 +19,7 @@ interface IProps {
 }
 
 export const CategoryList: FC<IProps> = ({
+  user,
   categories,
   activeCategoryName,
   handleDeleteCategory,
@@ -36,6 +38,7 @@ export const CategoryList: FC<IProps> = ({
       (category: ICategory): JSX.Element => (
         <React.Fragment key={nanoid()}>
           <Category
+            user={user}
             category={category}
             activeCategoryName={activeCategoryName}
             handleChangeCategory={handleChangeCategory}
