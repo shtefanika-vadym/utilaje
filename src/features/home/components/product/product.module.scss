@@ -12,7 +12,7 @@
   position: relative;
 
   &Content {
-    padding: 0 10px 10px 10px;
+    padding: 0 10px 0 10px;
   }
 
   &Title {
@@ -37,13 +37,12 @@
   }
 
   &Description {
+    height: 67px;
     font-weight: 500;
     padding: 5px 0 0 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: 0;
+    text-overflow: ellipsis;
   }
 
   &Button {
@@ -54,7 +53,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 0 20px 0;
+    padding: 20px 0 20px 0;
     color: var(--color-success);
   }
 

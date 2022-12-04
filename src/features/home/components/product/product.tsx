@@ -48,7 +48,9 @@ export const Product: FC<IProps> = ({ user, product, onAddToCart }) => {
           <div className={styles.parentTitle}>{product.title}</div>
           <div
             className={styles.parentDescription}
-            dangerouslySetInnerHTML={{ __html: product.description }}
+            dangerouslySetInnerHTML={{
+              __html: product.description,
+            }}
           />
         </div>
       </div>
