@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
-// import emailjs from '@emailjs/browser'
+import emailjs from '@emailjs/browser'
 import { db } from 'firebaseInit'
 import { FormikValues, useFormik } from 'formik'
 import { PATHS } from 'layout/paths'
@@ -17,8 +17,8 @@ import { IProduct } from 'common/interfaces/IProduct'
 import { RO_COUNTY } from 'features/cart/constants/county'
 import { SET_CART } from 'store/products-slice'
 import { UPDATE_ALERT_INFO } from 'store/alert-slice'
+import { GoBack } from 'common/components/go-back/go-back'
 
-// eslint-disable-next-line css-modules/no-unused-class
 import styles from './cart-order.module.scss'
 
 export const CartOrder = () => {
@@ -56,16 +56,17 @@ export const CartOrder = () => {
     }),
     onSubmit: async (values: FormikValues) => {
       const orderId: string = nanoid()
-      // const orderDetails = {
-      //   ...values,
-      //   id: orderId,
-      // }
+      const orderDetails = {
+        ...values,
+        id: orderId,
+      }
       try {
         await db.collection('orders').add({
           id: orderId,
           price: cartPrice,
           userDetails: values,
           products: cart,
+          finished: false,
         })
         dispatch(
           UPDATE_ALERT_INFO({
@@ -75,12 +76,12 @@ export const CartOrder = () => {
         )
         dispatch(SET_CART([]))
         navigate(PATHS.HOME)
-        // emailjs.send(
-        //   'service_0zf68ur',
-        //   'template_2gi9hch',
-        //   orderDetails,
-        //   'uBCaKes6Zz4v4RQFl',
-        // )
+        emailjs.send(
+          'service_0zf68ur',
+          'template_2gi9hch',
+          orderDetails,
+          'uBCaKes6Zz4v4RQFl',
+        )
       } catch (e) {
         dispatch(
           UPDATE_ALERT_INFO({
@@ -117,6 +118,7 @@ export const CartOrder = () => {
 
   return (
     <div className={styles.parent}>
+      <GoBack />
       <form className={styles.parentForm} onSubmit={formik.handleSubmit}>
         <h1 className={styles.parentTitle}>Finalizare comandă</h1>
         <div>

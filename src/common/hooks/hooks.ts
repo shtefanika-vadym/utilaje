@@ -5,7 +5,7 @@ import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 
 import { useAppDispatch } from 'common/hooks/redux'
 
-export function useFirebaseTable(table: 'products' | 'categories') {
+export function useFirebaseTable(table: 'products' | 'categories' | 'orders') {
   const dispatch = useAppDispatch()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState<boolean>(false)

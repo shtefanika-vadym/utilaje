@@ -11,6 +11,7 @@
     flex-direction: column;
     row-gap: 10px;
     margin: 0 auto;
+    padding: 20px 0 0 0;
 
     @include device(smallOnly) {
       width: 100%;
@@ -30,12 +31,6 @@
     color: var(--color-warning);
     font-size: 12px;
     margin-bottom: 0;
-  }
-
-  &Field {
-  }
-
-  &Label {
   }
 
   &Submit {

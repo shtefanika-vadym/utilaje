@@ -1,0 +1,27 @@
+@import 'src/styles/responsive';
+
+.parent {
+  &Manager {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 10px;
+    padding: 0 0 20px 0;
+
+    @include device(extraSmall) {
+      flex-direction: column;
+    }
+  }
+
+  &Search {
+    display: none;
+    @include device(extraSmall) {
+      display: unset;
+    }
+  }
+
+  &SearchIcon {
+    @include adaptive-value(width, 20, 15, 0);
+  }
+}

@@ -1,142 +1,231 @@
-import React, { ChangeEvent, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useToggle } from 'react-use'
+import React, { useEffect, useMemo } from 'react'
 
-import { PATHS } from 'layout/paths'
-import { SET_SEARCH_VALUE, UPDATE_CART } from 'store/products-slice'
-
-import searchIcon from 'common/assets/search.svg'
-
-import { Button } from 'common/components/Button/Button'
-import { Input } from 'common/components/Input/Input'
-import { ALT_IMG } from 'common/constants/constants'
-import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
-import { ICategory, IProduct } from 'common/interfaces/IProduct'
+import { Table, Tabs } from 'antd'
 import { AuthService } from 'common/services/auth-service'
-
-import { AddCategoryModal } from 'features/home/components/add-category-modal/add-category-modal'
-import { CategoryList } from 'features/home/components/category-list/category-list'
-import { ProductList } from 'features/home/components/product-list/product-list'
-import { RemoveCategoryModal } from 'features/home/components/remove-category-modal/remove-category-modal'
-import { HOME_LABELS } from 'features/home/constants/constants'
+import { HomeContent } from 'features/home/components/home-content/home-content'
+import { useFirebaseTable } from 'common/hooks/hooks'
 
 import styles from './home.module.scss'
+import { IProduct } from 'common/interfaces/IProduct'
+import { Select } from 'common/components/select/select'
+import { db } from 'firebaseInit'
+import { Button } from 'common/components/Button/Button'
+import { ColumnsType } from 'antd/es/table'
+import { nanoid } from 'nanoid'
 
 export const Home = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const dispatch = useAppDispatch()
-  const [removedCategory, setRemovedCategory] = useState<ICategory | null>(null)
-  const [isOpenRemoveModal, toggleIsOpenRemoveModal] = useToggle(false)
-  const [isOpenAddCategory, toggleIsOpenAddCategory] = useToggle(false)
+  const ordersFirebase = useFirebaseTable('orders')
 
-  const [activeCategory, setActiveCategory] = useState<string>('toate')
-  const { categories, products, searchValue, isFetchingProducts } =
-    useAppSelector((state) => state.productsReducer)
+  useEffect(() => {
+    ordersFirebase.createRequest()
+  }, [])
 
-  const handleChangeCategory = (category: string): void => {
-    setActiveCategory(category)
+  const handleUpdateOrder = (type: string, id: string) => {
+    if (type === 'Șterge') db.collection('orders').doc(id).delete()
+    else if (type === 'Finalizează') {
+      const updated = unFinishedOrders.find((order: any) => order.id === id)
+      if (updated)
+        db.collection('orders')
+          .doc(id)
+          .update({ ...updated, finished: true })
+    }
   }
 
-  const handleDeleteCategory = (category: ICategory) => {
-    setRemovedCategory(category)
-    toggleIsOpenRemoveModal()
-  }
+  const table_unFinished_columns: ColumnsType<any> = [
+    {
+      title: 'Preț',
+      dataIndex: 'price',
+      key: 'price',
+      width: 150,
+      render: (price: number) => (
+        <span>
+          {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Lei
+        </span>
+      ),
+    },
+    {
+      title: 'Adresa',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.address}</span>,
+    },
+    {
+      title: 'Județul',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.county}</span>,
+    },
+    {
+      title: 'Localitatea',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.town}</span>,
+    },
+    {
+      title: 'Telefon',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 200,
+      render: (userDetails: any) => <div>{userDetails.phone}</div>,
+    },
+    {
+      title: 'Produse',
+      dataIndex: 'products',
+      key: 'products',
+      width: 400,
+      render: (products: any) => (
+        <div>
+          {products.map((product: IProduct) => (
+            <>
+              <span key={nanoid()}>
+                {product.total}x {product.title}
+              </span>
+              <br />
+            </>
+          ))}
+        </div>
+      ),
+    },
+    {
+      title: 'Acțiune',
+      dataIndex: 'id',
+      key: 'id',
+      width: 250,
+      render: (id: string) => (
+        <div className={styles.parentBtns}>
+          <Select
+            value={'Acțiune'}
+            name={'tableAction'}
+            placeholder={'Acțiune'}
+            onChange={(value: string) => handleUpdateOrder(value, id)}
+            listOptions={['Șterge', 'Finalizează']}
+          />
+        </div>
+      ),
+    },
+  ]
 
-  const handleCloseModal = () => {
-    toggleIsOpenRemoveModal()
-    setRemovedCategory(null)
-  }
+  const table_completed_columns: ColumnsType<any> = [
+    {
+      title: 'Preț',
+      dataIndex: 'price',
+      key: 'price',
+      width: 150,
+      render: (price: number) => (
+        <span>
+          {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Lei
+        </span>
+      ),
+    },
+    {
+      title: 'Adresa',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.address}</span>,
+    },
+    {
+      title: 'Județul',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.county}</span>,
+    },
+    {
+      title: 'Localitatea',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 250,
+      render: (details: any) => <span>{details.town}</span>,
+    },
+    {
+      title: 'Telefon',
+      dataIndex: 'userDetails',
+      key: 'userDetails',
+      width: 200,
+      render: (userDetails: any) => <div>{userDetails.phone}</div>,
+    },
+    {
+      title: 'Produse',
+      dataIndex: 'products',
+      key: 'products',
+      width: 400,
+      render: (products: any) => (
+        <div>
+          {products.map((product: IProduct) => (
+            <>
+              <span key={nanoid()}>
+                {product.total}x {product.title}
+              </span>
+              <br />
+            </>
+          ))}
+        </div>
+      ),
+    },
+    {
+      title: 'Acțiune',
+      dataIndex: 'id',
+      key: 'id',
+      width: 250,
+      render: (id: string) => (
+        <div className={styles.parentBtns}>
+          <Button
+            modifier={'primary'}
+            onClick={() => handleUpdateOrder('Șterge', id)}>
+            Șterge
+          </Button>
+        </div>
+      ),
+    },
+  ]
 
-  const adjustedProducts = useMemo((): IProduct[] => {
-    const filteredProducts = products.filter((product: IProduct): boolean =>
-      product.title?.toLowerCase().includes(searchValue?.toLowerCase()),
-    )
-    if (activeCategory === 'toate') return filteredProducts
-    return filteredProducts.filter(
-      (product: IProduct): boolean => product.category === activeCategory,
-    )
-  }, [products, activeCategory, searchValue])
-
-  const isEmptyCategory = useMemo(
-    () =>
-      !products.filter(
-        (product: IProduct): boolean => product.category === activeCategory,
-      ).length && activeCategory !== 'toate',
-    [products, activeCategory],
+  const unFinishedOrders = useMemo(
+    () => ordersFirebase.data?.filter((order: any): boolean => !order.finished),
+    [ordersFirebase.data],
   )
 
-  const handleNavigateToAddProducts = (): void => {
-    if (!location.pathname.includes(PATHS.ADD_PRODUCT))
-      navigate(PATHS.ADD_PRODUCT)
-  }
+  const finishedOrders = useMemo(
+    () => ordersFirebase.data?.filter((order: any): boolean => order.finished),
+    [ordersFirebase.data],
+  )
 
-  const handleUpdateCart = (product: IProduct): void => {
-    dispatch(UPDATE_CART(product))
-  }
-
-  const handleChangeSearchValue = (
-    event: ChangeEvent<HTMLInputElement>,
-  ): void => {
-    dispatch(SET_SEARCH_VALUE(event.target.value))
-  }
+  if (!AuthService.getToken()) return <HomeContent />
 
   return (
     <div className={styles.parent}>
-      <RemoveCategoryModal
-        isOpen={isOpenRemoveModal}
-        category={removedCategory}
-        onClose={handleCloseModal}
+      <Tabs
+        items={[
+          { label: 'Acasă', key: 'item-1', children: <HomeContent /> },
+          {
+            label: 'Comenzi noi',
+            key: 'item-2',
+            children: (
+              <Table
+                pagination={false}
+                scroll={{ x: 800 }}
+                dataSource={unFinishedOrders}
+                columns={table_unFinished_columns}
+              />
+            ),
+          },
+          {
+            label: 'Comenzi finalizate',
+            key: 'item-3',
+            children: (
+              <Table
+                pagination={false}
+                scroll={{ x: 1200 }}
+                dataSource={finishedOrders}
+                columns={table_completed_columns}
+              />
+            ),
+          },
+        ]}
       />
-      <AddCategoryModal
-        isOpen={isOpenAddCategory}
-        onClose={toggleIsOpenAddCategory}
-      />
-      {AuthService.getToken() && (
-        <div className={styles.parentManager}>
-          <Button modifier={'outline'} onClick={toggleIsOpenAddCategory}>
-            {HOME_LABELS.ADD_CATEGORY}
-          </Button>
-          <Button modifier={'primary'} onClick={handleNavigateToAddProducts}>
-            {HOME_LABELS.ADD_PRODUCT}
-          </Button>
-        </div>
-      )}
-      <div className={styles.parentSearch}>
-        <Input
-          name='filter'
-          value={searchValue}
-          onChange={handleChangeSearchValue}
-          suffix={
-            <img
-              src={searchIcon}
-              alt={ALT_IMG.SEARCH_ICON}
-              className={styles.parentSearchIcon}
-            />
-          }
-          placeholder='Cauta dupa numele produsului...'
-        />
-      </div>
-      <CategoryList
-        categories={categories}
-        activeCategoryName={activeCategory}
-        handleDeleteCategory={handleDeleteCategory}
-        handleChangeCategory={handleChangeCategory}
-      />
-      {!!products.length &&
-      !isEmptyCategory &&
-      !adjustedProducts.length &&
-      !!searchValue.length ? (
-        <p className='message' style={{ margin: '40px 0 0 0' }}>
-          {HOME_LABELS.NO_PRODUCT_BY}"{searchValue}"
-        </p>
-      ) : (
-        <ProductList
-          products={adjustedProducts}
-          onAddToCart={handleUpdateCart}
-          isFetching={isFetchingProducts}
-        />
-      )}
     </div>
   )
 }

@@ -34,10 +34,10 @@ export const Product: FC<IProps> = ({ product, onAddToCart }) => {
     <div className={styles.parent}>
       <div>
         <Carousel dotPosition={'bottom'}>
-          {product.images.map((image: string) => (
+          {product.images.map((image: any) => (
             <div key={nanoid()}>
               <img
-                src={image}
+                src={image?.url}
                 alt={ALT_IMG.PRODUCT_IMAGE}
                 className={styles.parentImage}
                 onClick={handleNavigateToProduct}

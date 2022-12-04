@@ -65,9 +65,9 @@ export const products = createSlice({
       state.cart = action.payload
     },
 
-    FILTER_CART(state, action: PayloadAction<IProduct>) {
+    FILTER_CART(state, action: PayloadAction<string>) {
       state.cart = state.cart.filter(
-        (product: IProduct) => product.id !== action.payload.id,
+        (product: IProduct) => product.id !== action.payload,
       )
     },
   },

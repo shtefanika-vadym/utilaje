@@ -14,8 +14,8 @@
   left: 20px;
 
   &CloseIcon {
-    @include adaptive-value('width', 35, 20, 0);
-    @include adaptive-value('height', 35, 20, 0);
+    @include adaptive-value('width', 15, 10, 0);
+    @include adaptive-value('height', 15, 10, 0);
     position: absolute;
     top: 12px;
     right: 12px;

@@ -25,6 +25,12 @@
     }
   }
 
+  &RemoveBtn {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+  }
+
   &HeadTitle,
   &HeadClear {
     display: flex;

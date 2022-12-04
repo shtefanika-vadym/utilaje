@@ -162,6 +162,22 @@ input {
   border-radius: 0 0 6px 6px;
 }
 
+.ant-tabs-ink-bar {
+  background: var(--color-primary-100) !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--color-primary-100) !important;
+}
+
 li {
   list-style-position: inside;
+}
+
+.ant-empty-description {
+  visibility: hidden;
+}
+
+.ant-table-wrapper {
+  width: 100%;
 }

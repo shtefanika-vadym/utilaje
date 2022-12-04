@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import { PlusOutlined } from '@ant-design/icons'
@@ -46,6 +46,10 @@ export const NewProduct = () => {
     [params.id],
   )
 
+  useEffect(() => {
+    if (product) setUploadedFiles(product.images)
+  }, [product])
+
   const formik = useFormik({
     initialValues: product || {
       price: '',
@@ -76,7 +80,10 @@ export const NewProduct = () => {
 
   const handleUpdateProduct = async (values: FormikValues): Promise<void> => {
     try {
-      await db.collection('products').doc(values.id).update(values)
+      await db
+        .collection('products')
+        .doc(values.id)
+        .update({ ...values, images: JSON.stringify(values.images) })
       navigate(-1)
       dispatch(
         UPDATE_ALERT_INFO({
@@ -100,7 +107,9 @@ export const NewProduct = () => {
 
   const handleCreateProduct = async (values: FormikValues): Promise<void> => {
     try {
-      await db.collection('products').add({ ...values, id: nanoid() })
+      await db
+        .collection('products')
+        .add({ ...values, images: JSON.stringify(values.images), id: nanoid() })
       navigate(-1)
       dispatch(
         UPDATE_ALERT_INFO({
@@ -151,7 +160,7 @@ export const NewProduct = () => {
   const handleChange: UploadProps['onChange'] = async ({
     fileList: newFileList,
   }) => {
-    const files: string[] = []
+    const files: any[] = []
     for (let i = 0; i < newFileList.length; i++) {
       const file = newFileList[i]
       const storageRef = storage.ref('products')
@@ -159,9 +168,9 @@ export const NewProduct = () => {
       const fileRef = storageRef.child(file.name)
       await fileRef.put(file.originFileObj)
       const url = await fileRef.getDownloadURL()
-      files.push(url)
+      files.push({ ...file, status: 'done', url: url })
     }
-    setUploadedFiles(newFileList.map((file) => ({ ...file, status: 'done' })))
+    setUploadedFiles(files)
     formik.setFieldValue('images', files)
   }
 
@@ -171,12 +180,35 @@ export const NewProduct = () => {
     [categories],
   )
 
-  if (!AuthService.getToken() || !product) return <Navigate to={PATHS.HOME} />
+  const handleRemoveProduct = async (): Promise<void> => {
+    try {
+      await db.collection('products').doc(params?.id).delete()
+      navigate(-1)
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Produs șters',
+          description: 'Produsul a fost șters cu succes',
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        UPDATE_ALERT_INFO({
+          title: 'Eroare la ștergerea produsului',
+          description: e.message,
+        }),
+      )
+    } finally {
+      setTimeout(() => {
+        dispatch(UPDATE_ALERT_INFO(null))
+      }, 3000)
+    }
+  }
+
+  if (!AuthService.getToken() || (!product && params?.id))
+    return <Navigate to={PATHS.HOME} />
   return (
     <div className={styles.parent}>
-      <div className={styles.parentHead}>
-        <GoBack />
-      </div>
+      <GoBack />
       <form className={styles.parentForm} onSubmit={formik.handleSubmit}>
         <h1 className={styles.parentTitle}>
           {params.id ? 'Modificarea produsului' : 'Adaugarea unui produs'}
@@ -281,9 +313,14 @@ export const NewProduct = () => {
 
         <div className={styles.parentSubmit}>
           <Button htmlType='submit' modifier='primary'>
-            {params.id ? 'Modifică' : 'Adaugă produsul'}
+            {params.id ? 'Modifică produsul' : 'Adaugă produsul'}
           </Button>
         </div>
+        {params.id && (
+          <Button onClick={handleRemoveProduct} modifier='outline'>
+            Șterge produsul
+          </Button>
+        )}
       </form>
     </div>
   )

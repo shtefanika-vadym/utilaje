@@ -60,7 +60,15 @@ export const App = () => {
 
   useEffect(() => {
     if (Array.isArray(firebaseProducts.data)) {
-      dispatch(UPDATE_PRODUCTS(firebaseProducts.data))
+      const adjustedProducts = firebaseProducts.data.map((product) => {
+        return {
+          ...product,
+          images: !Array.isArray(product?.images)
+            ? JSON.parse(product?.images)
+            : product?.images,
+        }
+      })
+      dispatch(UPDATE_PRODUCTS(adjustedProducts))
       if (!!cart.length) {
         const uniqueCart: IProduct[] = []
         for (let i = 0; i < firebaseProducts.data.length; i++) {

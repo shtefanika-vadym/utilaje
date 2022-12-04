@@ -28,6 +28,12 @@
     height: 200px;
     object-fit: cover;
     cursor: pointer;
+
+    transition: 0.8s;
+    &:hover {
+      transform: scale(1.1);
+      transition: 0.8s;
+    }
   }
 
   &Description {

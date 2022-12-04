@@ -1,12 +1,17 @@
 @import 'src/styles/responsive';
 
 .parent {
-  max-width: 1020px;
+  max-width: 1920px;
   @include adaptive-value('padding', 40, 20, 0);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  row-gap: 30px;
+
+  &Content {
+    max-width: 1020px;
+    @include adaptive-value('padding', 40, 20, 0);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+  }
 
   &Title {
     margin-bottom: 20px;
@@ -30,11 +35,14 @@
   }
 
   &Image {
+    transition: 0.8s;
     object-fit: cover;
-    cursor: pointer;
-    border-radius: 10px;
     @include adaptive-value('width', 400, 200, 0);
     @include adaptive-value('height', 300, 150, 0);
+    &:hover {
+      transform: scale(1.1);
+      transition: 0.8s;
+    }
   }
 
   &Category {
@@ -51,31 +59,42 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 100px;
+    @include adaptive-value('column-gap', 100, 50, 0);
     position: relative;
+    @include device(extraMediumSmall) {
+      grid-template-columns: 1fr;
+    }
   }
 
-  &Btns {
-    display: flex;
-    column-gap: 20px;
-    align-items: center;
-    justify-content: space-between;
+  &PhotoContainer {
+    border-radius: 10px;
+    overflow: hidden;
+    @include adaptive-value('width', 400, 200, 0);
+    @include adaptive-value('height', 300, 150, 0);
   }
 
   &Photo {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    @include device(extraMediumSmall) {
+      justify-content: center;
+    }
   }
 
   &Details {
-    width: min-content;
     display: flex;
     flex-direction: column;
     row-gap: 10px;
     justify-content: center;
+    @include device(extraMediumSmall) {
+      width: 100%;
+      text-align: center;
+      padding: 40px 0 0 0;
+    }
   }
 
   &Description {
-    @include adaptive-value('padding-top', 70, 30, 0);
   }
 }

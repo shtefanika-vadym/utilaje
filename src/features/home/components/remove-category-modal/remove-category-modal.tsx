@@ -25,6 +25,14 @@ export const RemoveCategoryModal: FC<IProps> = ({
   const onRemove = async () => {
     try {
       await db.collection('categories').doc(category.id).delete()
+      const productInCategory = await db
+        .collection('products')
+        .where('category', '==', category.category)
+        .get()
+      const filteredDocs: string[] = productInCategory.docs.map((doc) => doc.id)
+      for (let i = 0; i < filteredDocs.length; i++)
+        await db.collection('products').doc(filteredDocs[i]).delete()
+
       dispatch(
         UPDATE_ALERT_INFO({
           title: 'Ștergere categorie',

@@ -10,13 +10,14 @@ import {
 
 import cartIcon from 'common/assets/cart-icon.svg'
 import removeIcon from 'common/assets/remove-icon.svg'
+import { InputNumber, Table } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 
 import { Button } from 'common/components/Button/Button'
 import { ALT_IMG } from 'common/constants/constants'
 import { useAppDispatch, useAppSelector } from 'common/hooks/redux'
 import { IProduct } from 'common/interfaces/IProduct'
 
-import { CartProductList } from 'features/cart/components/cart-product-list/cart-product-list'
 import { CART_LABELS } from 'features/cart/constants/constants'
 
 import styles from './cart-content.module.scss'
@@ -31,8 +32,8 @@ export const CartContent = () => {
   }
 
   const handleRemoveProduct = useCallback(
-    (product: IProduct): void => {
-      dispatch(FILTER_CART(product))
+    (productId: string): void => {
+      dispatch(FILTER_CART(productId))
     },
     [cart],
   )
@@ -54,6 +55,62 @@ export const CartContent = () => {
     navigate(PATHS.ORDER_NOW)
   }
 
+  const defaultColumns: ColumnsType<any> = [
+    {
+      title: 'Produs',
+      dataIndex: 'title',
+      width: 130,
+      fixed: 'left',
+      key: 'title',
+    },
+    {
+      title: 'Preț',
+      dataIndex: 'price',
+      key: 'price',
+      render: (price: number) => (
+        <span>
+          {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Lei
+        </span>
+      ),
+    },
+    {
+      title: 'Cantitate',
+      key: 'price',
+      dataIndex: ['id', 'price'],
+      render: (req: any, product: IProduct, res: any) => {
+        return (
+          <InputNumber
+            min={1}
+            max={100}
+            className='total-input-number'
+            defaultValue={product.total}
+            onChange={(total: number) =>
+              handleChangeTotalProduct(product, total)
+            }
+          />
+        )
+      },
+    },
+    {
+      title: 'Acțiune',
+      key: 'action',
+      dataIndex: 'id',
+      fixed: 'right',
+
+      render: (id: string) => {
+        return (
+          <div>
+            <button
+              className={styles.parentRemoveBtn}
+              onClick={() => handleRemoveProduct(id)}>
+              <img src={removeIcon} alt={ALT_IMG.REMOVE_ICON} />
+            </button>
+          </div>
+        )
+      },
+    },
+  ]
+
   return (
     <div className={styles.parent}>
       <div className={styles.parentHead}>
@@ -67,10 +124,11 @@ export const CartContent = () => {
         </button>
       </div>
 
-      <CartProductList
-        products={cart}
-        handleRemoveProduct={handleRemoveProduct}
-        handleChangeTotalProduct={handleChangeTotalProduct}
+      <Table
+        pagination={false}
+        columns={defaultColumns}
+        dataSource={cart}
+        scroll={{ x: 500 }}
       />
       <div className={styles.parentOrder}>
         <span className={styles.parentTotalPrice}>
