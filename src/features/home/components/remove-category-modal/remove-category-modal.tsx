@@ -36,7 +36,7 @@ export const RemoveCategoryModal: FC<IProps> = ({
       dispatch(
         UPDATE_ALERT_INFO({
           title: 'Ștergere categorie',
-          description: `Categoria ${category.category} a fost creata cu succes.`,
+          description: `Categoria ${category.category} a fost ștearsă cu succes.`,
         }),
       )
       onClose()

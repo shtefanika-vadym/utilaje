@@ -76,6 +76,7 @@
   &Photo {
     display: flex;
     align-items: center;
+    border-radius: 10px;
     justify-content: flex-end;
 
     @include device(extraMediumSmall) {

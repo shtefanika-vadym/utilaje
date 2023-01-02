@@ -20,6 +20,7 @@ import { RemoveCategoryModal } from 'features/home/components/remove-category-mo
 import { HOME_LABELS } from 'features/home/constants/constants'
 
 import styles from './home-content.module.scss'
+import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 
 export const HomeContent = () => {
   const navigate = useNavigate()
@@ -72,6 +73,12 @@ export const HomeContent = () => {
 
   const handleUpdateCart = (product: IProduct): void => {
     dispatch(UPDATE_CART(product))
+    dispatch(
+      UPDATE_ALERT_INFO({
+        title: 'Ai adăugat un produs în coș',
+        description: `Produsul: ${product.title}`,
+      }),
+    )
   }
 
   const handleChangeSearchValue = (

@@ -11,6 +11,7 @@ export const alertSlice = createSlice({
   initialState: initialState,
   reducers: {
     UPDATE_ALERT_INFO(state, action: PayloadAction<IAlert | null>) {
+      console.log(action.payload)
       state.alertInfo = action.payload
     },
   },

@@ -2,7 +2,7 @@
 
 .parent {
   &RemoveMessage {
-    @include adaptive-value('font-size', 18, 10, 0);
+    @include adaptive-value('font-size', 18, 14, 0);
     text-align: center;
   }
 

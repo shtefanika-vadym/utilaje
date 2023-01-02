@@ -20,10 +20,12 @@ import { UPDATE_ALERT_INFO } from 'store/alert-slice'
 import { GoBack } from 'common/components/go-back/go-back'
 
 import styles from './cart-order.module.scss'
+import { useToggle } from 'react-use'
 
 export const CartOrder = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const [loading, toggleIsLoading] = useToggle(false)
   const { cart } = useAppSelector((state: any) => state.productsReducer)
 
   const cartPrice = useMemo(
@@ -55,6 +57,7 @@ export const CartOrder = () => {
       town: Yup.string().required('Localitatea este obligatorie.'),
     }),
     onSubmit: async (values: FormikValues) => {
+      toggleIsLoading()
       const orderId: string = nanoid()
       const orderDetails = {
         ...values,
@@ -219,7 +222,7 @@ export const CartOrder = () => {
         </div>
 
         <div className={styles.parentSubmit}>
-          <Button htmlType='submit' modifier='primary'>
+          <Button disabled={loading} htmlType='submit' modifier='primary'>
             Trimite comanda
           </Button>
         </div>

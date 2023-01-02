@@ -159,9 +159,10 @@ export const NewProduct = () => {
   const handleChange: UploadProps['onChange'] = async ({
     fileList: newFileList,
   }) => {
-    const files: any[] = []
-    for (let i = 0; i < newFileList.length; i++) {
-      const file = newFileList[i]
+    const files: any[] = newFileList.filter((img) => img?.url)
+    const unUploadedList = newFileList.filter((img) => !img?.url)
+    for (let i = 0; i < unUploadedList.length; i++) {
+      const file = unUploadedList[i]
       const storageRef = storage.ref('products')
       // @ts-ignore
       const fileRef = storageRef.child(file.name)
